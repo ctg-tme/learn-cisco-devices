@@ -13,7 +13,8 @@ class CiscoDeviceApp {
       const routeParam = this.urlParams.get('route');
       if (routeParam) {
         // Clean up the URL and navigate to the proper route
-        const cleanUrl = new URL(window.location.origin + routeParam);
+        const repoName = window.SPA_CONFIG.REPO_NAME;
+        const cleanUrl = new URL(window.location.origin + repoName + routeParam);
         this.urlParams.delete('route');
         this.urlParams.forEach((value, key) => {
           cleanUrl.searchParams.set(key, value);
@@ -21,7 +22,7 @@ class CiscoDeviceApp {
         window.history.replaceState({}, '', cleanUrl.toString());
       }
       
-      const response = await fetch('config/pages.json');
+      const response = await fetch(this.getAbsolutePath('config/pages.json'));
       this.config = await response.json();
       
       // Handle initial route
@@ -64,7 +65,7 @@ class CiscoDeviceApp {
 
   getRouteFromPath(path) {
     // Handle GitHub Pages repository paths
-    const repoName = '/learn-cisco-devices';
+    const repoName = window.SPA_CONFIG.REPO_NAME;
     let cleanPath = path;
     
     // Remove repo name from path if present
@@ -262,7 +263,7 @@ class CiscoDeviceApp {
 
   getAbsolutePath(relativePath) {
     // Convert relative paths to absolute paths for GitHub Pages
-    const repoName = '/learn-cisco-devices';
+    const repoName = window.SPA_CONFIG.REPO_NAME;
     if (relativePath.startsWith('/')) {
       return relativePath;
     }
@@ -274,7 +275,7 @@ class CiscoDeviceApp {
     const currentParams = new URLSearchParams(window.location.search);
     
     // Ensure we maintain the GitHub Pages repository path
-    const repoName = '/learn-cisco-devices';
+    const repoName = window.SPA_CONFIG.REPO_NAME;
     let fullPath = path;
     
     // If path doesn't start with repo name, prepend it
