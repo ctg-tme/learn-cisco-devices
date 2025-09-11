@@ -63,8 +63,6 @@ class CiscoDeviceApp {
   }
 
   getRouteFromPath(path) {
-    console.log('Original path:', path); // Debug log
-    
     // Handle GitHub Pages repository paths
     const repoName = '/learn-cisco-devices';
     let cleanPath = path;
@@ -74,12 +72,9 @@ class CiscoDeviceApp {
       cleanPath = path.substring(repoName.length);
     }
     
-    console.log('Clean path after repo removal:', cleanPath); // Debug log
-    
     // Handle index.html and root paths - be more explicit
     if (cleanPath === '/' || cleanPath === '' || cleanPath === '/index.html' || 
         cleanPath.endsWith('/index.html') || path === repoName + '/' || path === repoName) {
-      console.log('Returning homepage'); // Debug log
       return 'homepage';
     }
     
@@ -88,8 +83,6 @@ class CiscoDeviceApp {
     
     // Remove index.html from the path if it exists
     const pathWithoutIndex = cleanPath.replace(/^index\.html\/?/, '');
-    
-    console.log('Final route:', pathWithoutIndex || 'homepage'); // Debug log
     
     if (!pathWithoutIndex || pathWithoutIndex === '' || cleanPath === 'index.html') {
       return 'homepage';
@@ -140,9 +133,9 @@ class CiscoDeviceApp {
           <h2 class="section-title">Available Deployments</h2>
           <div class="video-grid">
             ${config.deployments.map(deployment => `
-              <div class="deployment-card" data-route="${deployment.id}">
+              <div class="deployment-card" onclick="app.navigateTo('${deployment.id}')">
                 <div class="deployment-thumbnail">
-                  <img src="${deployment.thumbnail}" alt="${deployment.name} ${deployment.subtitle}">
+                  <img src="${this.getAbsolutePath(deployment.thumbnail)}" alt="${deployment.name} ${deployment.subtitle}">
                   <div class="deployment-overlay">
                     <h3>${deployment.name}</h3>
                     <p>${deployment.subtitle}</p>
@@ -170,7 +163,7 @@ class CiscoDeviceApp {
     const qrCode = document.getElementById('qrCode');
     const qrImage = document.getElementById('qrImage');
     if (this.urlParams.get('qr') !== 'false' && config.qrCode) {
-      qrImage.src = config.qrCode;
+      qrImage.src = this.getAbsolutePath(config.qrCode);
       qrCode.style.display = 'block';
     } else {
       qrCode.style.display = 'none';
@@ -189,9 +182,9 @@ class CiscoDeviceApp {
             <h2 class="section-title">${section.title}</h2>
             <div class="video-grid">
               ${section.videos.map(video => `
-                <div class="video-card" data-video="${video.video}">
+                <div class="video-card" data-video="${this.getAbsolutePath(video.video)}">
                   <div class="video-thumbnail">
-                    <img src="${video.thumbnail}" alt="${video.title}">
+                    <img src="${this.getAbsolutePath(video.thumbnail)}" alt="${video.title}">
                     <div class="play-button">▶</div>
                   </div>
                   <div class="video-info">
@@ -267,10 +260,29 @@ class CiscoDeviceApp {
     document.body.style.overflow = '';
   }
 
+  getAbsolutePath(relativePath) {
+    // Convert relative paths to absolute paths for GitHub Pages
+    const repoName = '/learn-cisco-devices';
+    if (relativePath.startsWith('/')) {
+      return relativePath;
+    }
+    return repoName + '/' + relativePath;
+  }
+
   navigateTo(path) {
     // Preserve current URL parameters
     const currentParams = new URLSearchParams(window.location.search);
-    const newUrl = new URL(path, window.location.origin);
+    
+    // Ensure we maintain the GitHub Pages repository path
+    const repoName = '/learn-cisco-devices';
+    let fullPath = path;
+    
+    // If path doesn't start with repo name, prepend it
+    if (!path.startsWith(repoName)) {
+      fullPath = repoName + (path.startsWith('/') ? path : '/' + path);
+    }
+    
+    const newUrl = new URL(fullPath, window.location.origin);
     
     // Add all current parameters to the new URL
     currentParams.forEach((value, key) => {
