@@ -18,7 +18,6 @@
   "mtr-navigator": {
     "title": "Learn Cisco Devices - Microsoft Teams Rooms with Navigator",
     "type": "deployment",
-    "qrCode": "mtr-navigator/images/mtr_navigator_MTR_LP_QR_code.png",
     "header": {
       "title": "Learn how to use your Cisco device",
       "subtitle": "Video tutorials for Microsoft Teams Rooms with Navigator"
@@ -44,6 +43,12 @@
             "title": "4K MP4 Schedule a meeting with Microsoft Teams Calendar",
             "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
             "video": "mtr-navigator/videos/mtr_navigator_schedule_teams.mp4",
+            "tags": ["teams", "calendar"]
+          },
+          {
+            "title": "1080p MP4 Schedule a meeting with Microsoft Teams Calendar",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
+            "video": "mtr-navigator/videos/mtr_navigator_schedule_teams_1080p.mp4",
             "tags": ["teams", "calendar"]
           },
           {

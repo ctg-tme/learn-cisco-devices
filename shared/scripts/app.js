@@ -212,8 +212,12 @@ class CiscoDeviceApp {
     const qrCode = document.getElementById('qrCode');
     const qrImage = document.getElementById('qrImage');
     
-    if (this.urlParams.get('qr') !== 'false' && config.qrCode) {
-      qrImage.src = this.getAbsolutePath(config.qrCode);
+    if (this.urlParams.get('qr') !== 'false') {
+      // Generate dynamic QR code based on current URL
+      const currentUrl = encodeURIComponent(window.location.href);
+      const qrSize = '200x200'; // Default size, can be made configurable
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?data=${currentUrl}&size=${qrSize}`;
+      qrImage.alt = 'QR Code for current page';
       qrCode.style.display = 'block';
     } else {
       qrCode.style.display = 'none';
