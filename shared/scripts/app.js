@@ -63,13 +63,23 @@ class CiscoDeviceApp {
   }
 
   getRouteFromPath(path) {
-    // Handle index.html specifically
-    if (path.endsWith('/index.html') || path === '/index.html' || path === '/' || path === '') {
+    // Handle GitHub Pages repository paths
+    const repoName = '/learn-cisco-devices';
+    let cleanPath = path;
+    
+    // Remove repo name from path if present
+    if (path.startsWith(repoName)) {
+      cleanPath = path.substring(repoName.length);
+    }
+    
+    // Handle index.html and root paths
+    if (cleanPath.endsWith('/index.html') || cleanPath === '/index.html' || 
+        cleanPath === '/' || cleanPath === '' || cleanPath === repoName + '/') {
       return 'homepage';
     }
     
     // Remove leading/trailing slashes and get the route
-    const cleanPath = path.replace(/^\/+|\/+$/g, '');
+    cleanPath = cleanPath.replace(/^\/+|\/+$/g, '');
     
     // Remove index.html from the path if it exists
     const pathWithoutIndex = cleanPath.replace(/^index\.html\/?/, '');
