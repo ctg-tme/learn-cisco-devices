@@ -28,21 +28,15 @@
         "title": "Create a Meeting",
         "videos": [
           {
-            "title": "1080p GIF Schedule a meeting with Microsoft Teams Calendar",
-            "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
-            "video": "mtr-navigator/videos/mtr_navigator_schedule_teams.gif",
-            "tags": ["teams", "calendar"]
-          },
-          {
             "title": "4K Webm Schedule a meeting with Microsoft Teams Calendar",
             "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
             "video": "mtr-navigator/videos/mtr_navigator_schedule_teams.webm",
             "tags": ["teams", "calendar"]
           },
           {
-            "title": "4K GIF Schedule a meeting with Microsoft Teams Calendar",
+            "title": "1080p Webm Schedule a meeting with Microsoft Teams Calendar",
             "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
-            "video": "mtr-navigator/videos/mtr_navigator_schedule_teams_4k.gif",
+            "video": "mtr-navigator/videos/mtr_navigator_schedule_teams_1080p.webm",
             "tags": ["teams", "calendar"]
           },
           {
