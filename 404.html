@@ -33,9 +33,17 @@
       const params = window.location.search;
       
       // If we're on a 404 page but the path looks like a valid route
-      if (path !== '/' && path !== '/index.html') {
-        // Redirect to root with the path as a parameter for the SPA to handle
-        const newUrl = '/' + params + (params ? '&' : '?') + 'route=' + encodeURIComponent(path);
+      if (path !== '/' && path !== '/index.html' && path !== '/learn-cisco-devices/' && path !== '/learn-cisco-devices/index.html') {
+        // Extract the route part after the repo name
+        const repoName = '/learn-cisco-devices';
+        let routePath = path;
+        
+        if (path.startsWith(repoName)) {
+          routePath = path.substring(repoName.length);
+        }
+        
+        // Redirect to repo root with the path as a parameter for the SPA to handle
+        const newUrl = repoName + '/' + params + (params ? '&' : '?') + 'route=' + encodeURIComponent(routePath);
         window.location.replace(newUrl);
       }
     })();
