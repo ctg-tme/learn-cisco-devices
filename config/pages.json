@@ -34,6 +34,12 @@
             "tags": ["teams", "calendar"]
           },
           {
+            "title": "4K Webm Schedule a meeting with Microsoft Teams Calendar",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
+            "video": "mtr-navigator/videos/mtr_navigator_schedule_teams.webm",
+            "tags": ["teams", "calendar"]
+          },
+          {
             "title": "4K GIF Schedule a meeting with Microsoft Teams Calendar",
             "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
             "video": "mtr-navigator/videos/mtr_navigator_schedule_teams_4k.gif",
