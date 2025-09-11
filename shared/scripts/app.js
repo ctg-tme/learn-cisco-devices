@@ -233,7 +233,7 @@ class CiscoDeviceApp {
       if (filteredVideos.length === 0) return '';
       
       const videosHtml = filteredVideos.map(video => `
-        <div class="video-card" onclick="window.app.playVideo('${this.getAbsolutePath(video.video)}')">
+        <div class="video-card" onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')">
           <div class="video-thumbnail">
             <img src="${this.getAbsolutePath(video.thumbnail)}" alt="${video.title}">
             <div class="play-button">▶</div>
