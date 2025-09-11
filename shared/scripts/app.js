@@ -313,6 +313,10 @@ class CiscoDeviceApp {
     });
   }
 
+  playVideo(videoSrc) {
+    this.openModal(videoSrc);
+  }
+
   closeModal() {
     const modal = document.getElementById('videoModal');
     const modalVideo = document.getElementById('modalVideo');
