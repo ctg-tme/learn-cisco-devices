@@ -63,6 +63,8 @@ class CiscoDeviceApp {
   }
 
   getRouteFromPath(path) {
+    console.log('Original path:', path); // Debug log
+    
     // Handle GitHub Pages repository paths
     const repoName = '/learn-cisco-devices';
     let cleanPath = path;
@@ -72,9 +74,12 @@ class CiscoDeviceApp {
       cleanPath = path.substring(repoName.length);
     }
     
-    // Handle index.html and root paths
-    if (cleanPath.endsWith('/index.html') || cleanPath === '/index.html' || 
-        cleanPath === '/' || cleanPath === '' || cleanPath === repoName + '/') {
+    console.log('Clean path after repo removal:', cleanPath); // Debug log
+    
+    // Handle index.html and root paths - be more explicit
+    if (cleanPath === '/' || cleanPath === '' || cleanPath === '/index.html' || 
+        cleanPath.endsWith('/index.html') || path === repoName + '/' || path === repoName) {
+      console.log('Returning homepage'); // Debug log
       return 'homepage';
     }
     
@@ -83,6 +88,8 @@ class CiscoDeviceApp {
     
     // Remove index.html from the path if it exists
     const pathWithoutIndex = cleanPath.replace(/^index\.html\/?/, '');
+    
+    console.log('Final route:', pathWithoutIndex || 'homepage'); // Debug log
     
     if (!pathWithoutIndex || pathWithoutIndex === '' || cleanPath === 'index.html') {
       return 'homepage';
