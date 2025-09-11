@@ -133,7 +133,7 @@ class CiscoDeviceApp {
           <h2 class="section-title">Available Deployments</h2>
           <div class="video-grid">
             ${config.deployments.map(deployment => `
-              <div class="deployment-card" onclick="app.navigateTo('${deployment.id}')">
+              <div class="deployment-card" data-route="${deployment.id}">
                 <div class="deployment-thumbnail">
                   <img src="${this.getAbsolutePath(deployment.thumbnail)}" alt="${deployment.name} ${deployment.subtitle}">
                   <div class="deployment-overlay">
@@ -153,7 +153,7 @@ class CiscoDeviceApp {
     deploymentCards.forEach(card => {
       card.addEventListener('click', () => {
         const route = card.getAttribute('data-route');
-        this.navigateTo(`/${route}`);
+        this.navigateTo(route);
       });
     });
   }
@@ -310,7 +310,5 @@ class CiscoDeviceApp {
   }
 }
 
-// Initialize the app when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  new CiscoDeviceApp();
-});
+// Initialize the app
+window.ciscoApp = new CiscoDeviceApp();
