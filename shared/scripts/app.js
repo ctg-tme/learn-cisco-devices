@@ -311,6 +311,26 @@ class CiscoDeviceApp {
     modalVideo.play().catch(e => {
       console.log('Autoplay prevented by browser:', e);
     });
+
+    // Close modal when clicking on background or pressing Escape
+    const handleModalClick = (e) => {
+      if (e.target === modal) {
+        this.closeModal();
+        modal.removeEventListener('click', handleModalClick);
+        document.removeEventListener('keydown', handleEscapeKey);
+      }
+    };
+    
+    const handleEscapeKey = (e) => {
+      if (e.key === 'Escape') {
+        this.closeModal();
+        modal.removeEventListener('click', handleModalClick);
+        document.removeEventListener('keydown', handleEscapeKey);
+      }
+    };
+    
+    modal.addEventListener('click', handleModalClick);
+    document.addEventListener('keydown', handleEscapeKey);
   }
 
   playVideo(videoSrc) {
