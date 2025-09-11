@@ -49,12 +49,26 @@ body {
 body::before {
   content: '';
   position: absolute;
-  top: 120px; /* Position at bottom of header */
-  left: 50%;
-  transform: translateX(-50%);
+  top: 120px; /* Position center at bottom of header */
+  left: 25%;
+  transform: translate(-50%, -50%);
   width: 800px;
   height: 400px;
-  background: radial-gradient(ellipse at center, rgba(71, 142, 255, 0.15) 0%, rgba(71, 142, 255, 0.08) 30%, rgba(71, 142, 255, 0.03) 60%, transparent 100%);
+  background: radial-gradient(circle,rgba(17, 60, 103, 1) 1%, rgba(87, 199, 133, 0) 41%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+body::after {
+  content: '';
+  position: absolute;
+  top: 120px; /* Position center at bottom of header */
+  left: 35%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(circle,rgba(14, 70, 103, 1) 1%, rgba(87, 199, 133, 0) 41%);
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
@@ -110,8 +124,10 @@ body.classic-theme .modal {
 .header {
   text-align: center;
   padding: 2rem 1rem;
-  background: rgba(7, 24, 45, 0.3);
+  background: #07182D;
   border-bottom: 2px solid #26384f;
+  position: relative;
+  z-index: 3;
 }
 
 .header h1 {
