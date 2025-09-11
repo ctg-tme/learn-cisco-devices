@@ -305,18 +305,33 @@ class CiscoDeviceApp {
     });
   }
 
-  openModal(videoSrc) {
+  openModal(mediaSrc) {
     const modal = document.getElementById('videoModal');
     const modalVideo = document.getElementById('modalVideo');
+    const modalGif = document.getElementById('modalGif');
     
-    modalVideo.src = videoSrc;
+    // Check if the file is a GIF
+    const isGif = mediaSrc.toLowerCase().endsWith('.gif');
+    
+    if (isGif) {
+      // Show GIF, hide video
+      modalVideo.style.display = 'none';
+      modalGif.style.display = 'block';
+      modalGif.src = mediaSrc;
+    } else {
+      // Show video, hide GIF
+      modalGif.style.display = 'none';
+      modalVideo.style.display = 'block';
+      modalVideo.src = mediaSrc;
+      
+      // Auto-play the video
+      modalVideo.play().catch(e => {
+        console.log('Autoplay prevented by browser:', e);
+      });
+    }
+    
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
-    
-    // Auto-play the video
-    modalVideo.play().catch(e => {
-      console.log('Autoplay prevented by browser:', e);
-    });
 
     // Close modal when clicking on background or pressing Escape
     const handleModalClick = (e) => {
@@ -346,10 +361,14 @@ class CiscoDeviceApp {
   closeModal() {
     const modal = document.getElementById('videoModal');
     const modalVideo = document.getElementById('modalVideo');
+    const modalGif = document.getElementById('modalGif');
     
     modal.classList.remove('active');
     modalVideo.pause();
     modalVideo.src = '';
+    modalGif.src = '';
+    modalVideo.style.display = 'block';
+    modalGif.style.display = 'none';
     document.body.style.overflow = '';
   }
 
