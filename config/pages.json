@@ -30,7 +30,7 @@
         "videos": [
           {
             "title": "Schedule a meeting with Microsoft Teams Calendar",
-            "thumbnail": "mtr-navigator/images/mtr_navigator_share_teams_meeting.png",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
             "video": "mtr-navigator/videos/mtr_navigator_schedule_teams.mp4",
             "tags": ["teams", "calendar"]
           },
