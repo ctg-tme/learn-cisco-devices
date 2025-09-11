@@ -67,8 +67,8 @@ class CiscoDeviceApp {
   setupEventListeners() {
     // Theme parameter handling
     const theme = this.urlParams.get('theme');
-    if (theme === 'classic') {
-      document.body.classList.add('classic-theme');
+    if (theme === 'dark') {
+      document.body.classList.add('dark-theme');
     }
 
     // QR code parameter handling

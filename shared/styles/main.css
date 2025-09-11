@@ -74,50 +74,50 @@ body::after {
   z-index: 1;
 }
 
-/* Classic theme - original white text on dark grey */
-body.classic-theme {
+/* Dark theme - original white text on dark grey */
+body.dark-theme {
   background: #2c2c2c;
 }
 
-body.classic-theme .header {
+body.dark-theme .header {
   background: rgba(60, 60, 60, 0.8);
   border-bottom: 2px solid #555;
 }
 
-body.classic-theme .video-card {
+body.dark-theme .video-card {
   background: #3a3a3a;
   border: 1px solid #555;
 }
 
-body.classic-theme .video-card:hover {
+body.dark-theme .video-card:hover {
   border-color: #777;
 }
 
-body.classic-theme .section-title {
+body.dark-theme .section-title {
   border-bottom: 1px solid #555;
 }
 
-body.classic-theme .play-button {
+body.dark-theme .play-button {
   background: rgba(255, 255, 255, 0.9);
   color: #2c2c2c;
 }
 
-body.classic-theme .video-card:hover .play-button {
+body.dark-theme .video-card:hover .play-button {
   background: #ffffff;
   color: #2c2c2c;
 }
 
-body.classic-theme .close-button {
+body.dark-theme .close-button {
   background: rgba(255, 255, 255, 0.8);
   color: #2c2c2c;
 }
 
-body.classic-theme .close-button:hover {
+body.dark-theme .close-button:hover {
   background: #ffffff;
   color: #2c2c2c;
 }
 
-body.classic-theme .modal {
+body.dark-theme .modal {
   background: rgba(44, 44, 44, 0.95);
 }
 
@@ -337,13 +337,13 @@ h3.video-title {
   opacity: 0.9;
 }
 
-/* Classic theme overrides for deployment cards */
-body.classic-theme .deployment-card {
+/* Dark theme overrides for deployment cards */
+body.dark-theme .deployment-card {
   background: #3a3a3a;
   border-color: #555;
 }
 
-body.classic-theme .deployment-card:hover {
+body.dark-theme .deployment-card:hover {
   border-color: #888;
 }
 
