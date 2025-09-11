@@ -79,6 +79,11 @@ body.dark-theme {
   background: #2c2c2c;
 }
 
+body.dark-theme::before,
+body.dark-theme::after {
+  display: none;
+}
+
 body.dark-theme .header {
   background: rgba(60, 60, 60, 0.8);
   border-bottom: 2px solid #555;
