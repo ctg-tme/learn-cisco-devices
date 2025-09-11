@@ -77,6 +77,12 @@ class CiscoDeviceApp {
     if (showQR === 'false' && qrCode) {
       qrCode.style.display = 'none';
     }
+
+    // Setup close button for video modal
+    const closeButton = document.getElementById('closeModal');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => this.closeModal());
+    }
   }
 
   handleRoute() {
