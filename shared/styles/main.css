@@ -43,6 +43,21 @@ body {
   background: #07182D;
   color: white;
   min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 120px; /* Position at bottom of header */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(71, 142, 255, 0.15) 0%, rgba(71, 142, 255, 0.08) 30%, rgba(71, 142, 255, 0.03) 60%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Classic theme - original white text on dark grey */
@@ -114,6 +129,8 @@ body.classic-theme .modal {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 .video-grid {
