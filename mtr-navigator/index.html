@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Learn Cisco Devices - Microsoft Teams Rooms with Navigator</title>
+  <link rel="icon" type="image/png" href="../shared/assets/images/favicon.png">
+  <link rel="stylesheet" href="../shared/styles/main.css">
+</head>
+
+<body>
+  <!-- QR Code -->
+  <div class="qr-code" id="qrCode">
+    <img src="images/MTR_LP_QR_code.png" alt="QR Code">
+    <p class="qr-text">View on your phone</p>
+  </div>
+
+  <div class="header">
+    <h1>Learn how to use your Cisco device</h1>
+    <p>Video tutorials for Microsoft Teams Rooms with Navigator</p>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <h2 class="section-title">Create a Meeting</h2>
+      <div class="video-grid">
+        <div class="video-card" data-video="videos/Schedule_a_meeting_with_Teams.mp4">
+          <div class="video-thumbnail">
+            <img src="images/How%20to%20Share%20Content%20during%20a%20Microsoft%20Teams%20Room%20Meeting%20.png" alt="Schedule a meeting with Microsoft Teams Calendar">
+            <div class="play-button">▶</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Schedule a meeting with Microsoft Teams Calendar</div>
+          </div>
+        </div>
+        
+        <div class="video-card" data-video="videos/Schedule_a_Meeting_from_Navigator.webm">
+          <div class="video-thumbnail">
+            <img src="images/How%20to%20Share%20Content%20during%20a%20Microsoft%20Teams%20Room%20Meeting%20_Navigator.png" alt="Schedule a meeting from Navigator">
+            <div class="play-button">▶</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Create a meeting with Cisco Navigator</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Join a Meeting</h2>
+      <div class="video-grid">
+        <div class="video-card" data-video="videos/Join_a_meeting_from_your_Device.webm">
+          <div class="video-thumbnail">
+            <img src="images/Join%20a%20meeting%20from%20your%20device.png" alt="Join a meeting from your device">
+            <div class="play-button">▶</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Join a meeting from your device</div>
+          </div>
+        </div>
+        
+        <div class="video-card" data-video="videos/How_to_Join_a_Meeting_with_QR_code.webm">
+          <div class="video-thumbnail">
+            <img src="images/Join%20a%20meeting%20with%20QR%20code%20scan%20.png" alt="Join a meeting with QR code">
+            <div class="play-button">▶</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Join a meeting with QR code</div>
+          </div>
+        </div>
+        
+        <div class="video-card" data-video="videos/How_to_Join_a_Webex_Zoom_Meeting_with_Meeting_ID.webm">
+          <div class="video-thumbnail">
+            <img src="images/Join%20a%20Microsoft%20Teams%20meeting%20with%20meeting%20ID.png" alt="Join a Webex/Zoom meeting with meeting ID">
+            <div class="play-button">▶</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Join a Webex/Zoom meeting with meeting ID</div>
+          </div>
+        </div>
+        
+        <div class="video-card" data-video="videos/How_to_Join_with_room_audio.webm">
+          <div class="video-thumbnail">
+            <img src="images/Join%20a%20meeting%20with%20room%20audio%20.png" alt="Join with room audio">
+            <div class="play-button">▶</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Join with room audio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Share Content</h2>
+      <div class="video-grid">
+        <div class="video-card" data-video="videos/How_to_Share_Content_during_a_Microsoft_Teams_Room_Meeting.webm">
+          <div class="video-thumbnail">
+            <img src="images/How%20to%20Share%20Content%20during%20a%20Microsoft%20Teams%20Room%20Meeting%20.png" alt="Share content during a Microsoft Teams Room meeting">
+            <div class="play-button">▶</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Share content during a Microsoft Teams Room meeting</div>
+          </div>
+        </div>
+        
+        <div class="video-card" data-video="videos/Share_via_Powerpoint_Live.webm">
+          <div class="video-thumbnail">
+            <img src="images/Share%20via%20Powerpoint%20Live%20.png" alt="Share with PowerPoint Live">
+            <div class="play-button">▶</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Share with PowerPoint Live</div>
+          </div>
+        </div>
+        
+        <div class="video-card" data-video="videos/Share_with_Miracast.webm">
+          <div class="video-thumbnail">
+            <img src="images/Share%20with%20Miracast%20.png" alt="Share with Miracast">
+            <div class="play-button">▶</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Share with Miracast</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Modal -->
+  <div class="modal" id="videoModal">
+    <div class="modal-content">
+      <button class="close-button" id="closeModal">← Back</button>
+      <video id="modalVideo" controls>
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+  <script src="../shared/scripts/scripts.js"></script>
+</body>
+</html>
