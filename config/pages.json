@@ -93,12 +93,6 @@
             "thumbnail": "mtr-navigator/images/mtr_navigator_share_miracast.png",
             "video": "mtr-navigator/videos/mtr_navigator_share_miracast.webm",
             "tags": ["miracast", "wireless"]
-          },
-          {
-            "title": "Share with AirPlay",
-            "thumbnail": "mtr-navigator/images/mtr_navigator_share_miracast.png",
-            "video": "mtr-navigator/videos/mtr_navigator_share_miracast.webm",
-            "tags": ["airplay", "wireless", "apple"]
           }
         ]
       }
