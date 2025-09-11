@@ -31,12 +31,14 @@
           {
             "title": "Schedule a meeting with Microsoft Teams Calendar",
             "thumbnail": "mtr-navigator/images/mtr_navigator_share_teams_meeting.png",
-            "video": "mtr-navigator/videos/mtr_navigator_schedule_teams.mp4"
+            "video": "mtr-navigator/videos/mtr_navigator_schedule_teams.mp4",
+            "tags": ["teams", "calendar"]
           },
           {
             "title": "Create a meeting with Cisco Navigator",
             "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_navigator.png",
-            "video": "mtr-navigator/videos/mtr_navigator_schedule_navigator.webm"
+            "video": "mtr-navigator/videos/mtr_navigator_schedule_navigator.webm",
+            "tags": ["navigator", "cisco"]
           }
         ]
       },
@@ -47,22 +49,26 @@
           {
             "title": "Join a meeting from your device",
             "thumbnail": "mtr-navigator/images/mtr_navigator_join_device.png",
-            "video": "mtr-navigator/videos/mtr_navigator_join_device.webm"
+            "video": "mtr-navigator/videos/mtr_navigator_join_device.webm",
+            "tags": ["device", "teams"]
           },
           {
             "title": "Join a meeting with QR code",
             "thumbnail": "mtr-navigator/images/mtr_navigator_join_qr.png",
-            "video": "mtr-navigator/videos/mtr_navigator_join_qr.webm"
+            "video": "mtr-navigator/videos/mtr_navigator_join_qr.webm",
+            "tags": ["qr", "mobile"]
           },
           {
             "title": "Join a Webex/Zoom meeting with meeting ID",
             "thumbnail": "mtr-navigator/images/mtr_navigator_join_webex_zoom_id.png",
-            "video": "mtr-navigator/videos/mtr_navigator_join_webex_zoom_id.webm"
+            "video": "mtr-navigator/videos/mtr_navigator_join_webex_zoom_id.webm",
+            "tags": ["third-party", "webex", "zoom"]
           },
           {
             "title": "Join with room audio",
             "thumbnail": "mtr-navigator/images/mtr_navigator_join_room_audio.png",
-            "video": "mtr-navigator/videos/mtr_navigator_join_room_audio.webm"
+            "video": "mtr-navigator/videos/mtr_navigator_join_room_audio.webm",
+            "tags": ["audio", "room"]
           }
         ]
       },
@@ -73,17 +79,26 @@
           {
             "title": "Share content during a Microsoft Teams Room meeting",
             "thumbnail": "mtr-navigator/images/mtr_navigator_share_teams_meeting.png",
-            "video": "mtr-navigator/videos/mtr_navigator_share_teams_meeting.webm"
+            "video": "mtr-navigator/videos/mtr_navigator_share_teams_meeting.webm",
+            "tags": ["teams", "share"]
           },
           {
             "title": "Share with PowerPoint Live",
             "thumbnail": "mtr-navigator/images/mtr_navigator_share_powerpoint.png",
-            "video": "mtr-navigator/videos/mtr_navigator_share_powerpoint.webm"
+            "video": "mtr-navigator/videos/mtr_navigator_share_powerpoint.webm",
+            "tags": ["powerpoint", "office"]
           },
           {
             "title": "Share with Miracast",
             "thumbnail": "mtr-navigator/images/mtr_navigator_share_miracast.png",
-            "video": "mtr-navigator/videos/mtr_navigator_share_miracast.webm"
+            "video": "mtr-navigator/videos/mtr_navigator_share_miracast.webm",
+            "tags": ["miracast", "wireless"]
+          },
+          {
+            "title": "Share with AirPlay",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_share_miracast.png",
+            "video": "mtr-navigator/videos/mtr_navigator_share_miracast.webm",
+            "tags": ["airplay", "wireless", "apple"]
           }
         ]
       }

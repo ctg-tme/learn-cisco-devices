@@ -4,7 +4,29 @@ class CiscoDeviceApp {
     this.config = null;
     this.currentPage = null;
     this.urlParams = new URLSearchParams(window.location.search);
+    this.filters = this.parseFilters();
     this.init();
+  }
+
+  parseFilters() {
+    const filters = {
+      hide: [],
+      show: []
+    };
+    
+    // Parse hide parameter - supports multiple comma-separated values
+    const hideParam = this.urlParams.get('hide');
+    if (hideParam) {
+      filters.hide = hideParam.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+    }
+    
+    // Parse show parameter - supports multiple comma-separated values  
+    const showParam = this.urlParams.get('show');
+    if (showParam) {
+      filters.show = showParam.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+    }
+    
+    return filters;
   }
 
   async init() {
@@ -159,10 +181,31 @@ class CiscoDeviceApp {
     });
   }
 
+  filterVideo(video) {
+    if (!video.tags) return true; // Show videos without tags by default
+    
+    const { hide, show } = this.filters;
+    
+    // If show filter is specified, video must have at least one matching tag
+    if (show.length > 0) {
+      const hasShowTag = video.tags.some(tag => show.includes(tag));
+      if (!hasShowTag) return false;
+    }
+    
+    // If hide filter is specified, video must not have any matching tags
+    if (hide.length > 0) {
+      const hasHideTag = video.tags.some(tag => hide.includes(tag));
+      if (hasHideTag) return false;
+    }
+    
+    return true;
+  }
+
   renderDeploymentPage(config) {
     // Show QR code if not disabled
     const qrCode = document.getElementById('qrCode');
     const qrImage = document.getElementById('qrImage');
+    
     if (this.urlParams.get('qr') !== 'false' && config.qrCode) {
       qrImage.src = this.getAbsolutePath(config.qrCode);
       qrCode.style.display = 'block';
@@ -170,37 +213,56 @@ class CiscoDeviceApp {
       qrCode.style.display = 'none';
     }
 
-    const app = document.getElementById('app');
-    app.innerHTML = `
+    // Set page title
+    document.title = config.title;
+
+    // Render header
+    const headerHtml = `
       <div class="header">
         <h1>${config.header.title}</h1>
         <p>${config.header.subtitle}</p>
       </div>
+    `;
 
-      <div class="container">
-        ${config.sections.map(section => `
-          <div class="section">
-            <h2 class="section-title">${section.title}</h2>
-            <div class="video-grid">
-              ${section.videos.map(video => `
-                <div class="video-card" data-video="${this.getAbsolutePath(video.video)}">
-                  <div class="video-thumbnail">
-                    <img src="${this.getAbsolutePath(video.thumbnail)}" alt="${video.title}">
-                    <div class="play-button">▶</div>
-                  </div>
-                  <div class="video-info">
-                    <h3 class="video-title">${video.title}</h3>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
+    // Render sections with filtered videos
+    const sectionsHtml = config.sections.map(section => {
+      // Filter videos based on URL parameters
+      const filteredVideos = section.videos.filter(video => this.filterVideo(video));
+      
+      // Skip empty sections
+      if (filteredVideos.length === 0) return '';
+      
+      const videosHtml = filteredVideos.map(video => `
+        <div class="video-card" onclick="window.app.playVideo('${this.getAbsolutePath(video.video)}')">
+          <div class="video-thumbnail">
+            <img src="${this.getAbsolutePath(video.thumbnail)}" alt="${video.title}">
+            <div class="play-button">▶</div>
           </div>
-        `).join('')}
+          <div class="video-info">
+            <h3 class="video-title">${video.title}</h3>
+          </div>
+        </div>
+      `).join('');
+
+      return `
+        <div class="section">
+          <h2 class="section-title">${section.title}</h2>
+          <div class="video-grid">
+            ${videosHtml}
+          </div>
+        </div>
+      `;
+    }).filter(sectionHtml => sectionHtml !== '').join('');
+
+    const appContainer = document.getElementById('app');
+    appContainer.innerHTML = `
+      ${headerHtml}
+      <div class="container">
+        ${sectionsHtml}
       </div>
     `;
 
-    // Setup video modal functionality
-    this.setupVideoModal();
+    this.setupEventListeners();
   }
 
   setupVideoModal() {
