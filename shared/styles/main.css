@@ -175,13 +175,14 @@ body.classic-theme .modal {
 }
 
 .video-info {
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
-.video-title {
+h3.video-title {
   font-size: 1.1rem;
   font-weight: 500;
   line-height: 1.4;
+  margin: 0;
 }
 
 .modal {

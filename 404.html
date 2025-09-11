@@ -26,6 +26,21 @@
   <!-- Main Content Container -->
   <div id="app"></div>
 
+  <script>
+    // GitHub Pages SPA routing - redirect 404s to proper routes
+    (function() {
+      const path = window.location.pathname;
+      const params = window.location.search;
+      
+      // If we're on a 404 page but the path looks like a valid route
+      if (path !== '/' && path !== '/index.html') {
+        // Redirect to root with the path as a parameter for the SPA to handle
+        const newUrl = '/' + params + (params ? '&' : '?') + 'route=' + encodeURIComponent(path);
+        window.location.replace(newUrl);
+      }
+    })();
+  </script>
+  
   <script src="shared/scripts/app.js"></script>
 </body>
 </html>
