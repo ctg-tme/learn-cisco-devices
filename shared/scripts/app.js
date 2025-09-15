@@ -231,7 +231,24 @@ class CiscoDeviceApp {
     const qrCode = document.getElementById('qrCode');
     const qrImage = document.getElementById('qrImage');
     
-    if (this.urlParams.get('qr') !== 'false') {
+    // Determine if QR code should be shown
+    const qrParam = this.urlParams.get('qr');
+    const isCiscoNavigator = navigator.userAgent.includes('Cisco Room Navigator');
+    const isRoomOS = navigator.userAgent.includes('RoomOS');
+    
+    let showQRCode = false;
+    
+    // URL parameter takes precedence
+    if (qrParam === 'true') {
+      showQRCode = true;
+    } else if (qrParam === 'false') {
+      showQRCode = false;
+    } else {
+      // No URL parameter set, use user agent detection
+      showQRCode = isCiscoNavigator || isRoomOS;
+    }
+    
+    if (showQRCode) {
       // Generate dynamic QR code based on current URL with qr=false parameter
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set('qr', 'false');
