@@ -347,7 +347,7 @@ h3.video-title {
   position: absolute;
   top: 20px;
   left: 20px;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(71, 142, 255, 0.8);
   border: none;
   color: #FFFFFF;
   font-size: 16px;
@@ -360,7 +360,7 @@ h3.video-title {
 }
 
 .close-button:hover {
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(71, 142, 255, 1.0);
   color: #FFFFFF;
   transform: scale(1.05);
 }

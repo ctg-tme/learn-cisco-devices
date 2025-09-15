@@ -388,9 +388,11 @@ class CiscoDeviceApp {
       modalVideo.style.display = 'block';
       modalVideo.src = mediaSrc;
       
-      // Set up video end detection and auto-close
+      // Set up video end detection and auto-close for Cisco devices
       const handleVideoEnd = () => {
-        this.startAutoCloseTimer();
+        if (this.shouldAutoClose()) {
+          this.startAutoCloseTimer();
+        }
       };
       
       // Remove any existing event listeners
@@ -425,6 +427,22 @@ class CiscoDeviceApp {
     
     modal.addEventListener('click', handleModalClick);
     document.addEventListener('keydown', handleEscapeKey);
+  }
+
+  shouldAutoClose() {
+    // Check URL parameter first - it takes precedence
+    const timeoutParam = this.urlParams.get('timeout');
+    if (timeoutParam === 'true') {
+      return true;
+    } else if (timeoutParam === 'false') {
+      return false;
+    }
+    
+    // No URL parameter set, check user agent for Cisco devices
+    const isCiscoNavigator = navigator.userAgent.includes('Cisco Room Navigator');
+    const isRoomOS = navigator.userAgent.includes('RoomOS');
+    
+    return isCiscoNavigator || isRoomOS;
   }
 
   playVideo(videoSrc) {
