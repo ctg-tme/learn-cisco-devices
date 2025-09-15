@@ -247,7 +247,7 @@ class CiscoDeviceApp {
     // Show debug info if requested
     const showDebug = this.urlParams.get('debug') === 'true';
     const debugHtml = showDebug ? `
-      <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; font-family: monospace; font-size: 12px;">
+      <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; font-family: monospace; font-size: 12px; color: black;">
         <strong>Debug Info:</strong><br>
         User Agent: ${navigator.userAgent}<br>
         Platform: ${navigator.platform}<br>
