@@ -66,7 +66,7 @@ body::before {
   background: radial-gradient(circle,rgba(17, 60, 103, 1) 1%, rgba(87, 199, 133, 0) 41%);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 
 body::after {
@@ -80,7 +80,7 @@ body::after {
   background: radial-gradient(circle,rgba(14, 70, 103, 1) 1%, rgba(87, 199, 133, 0) 41%);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 
 /* Dark theme - original white text on dark grey */
@@ -221,7 +221,7 @@ body.dark-theme .modal {
   background: #07182D;
   border-bottom: 2px solid #26384f;
   position: relative;
-  z-index: 3;
+  z-index: 2;
 }
 
 .header h1 {
@@ -241,6 +241,8 @@ body.dark-theme .modal {
   padding: 0 1rem;
   width: 100%;
   overflow-x: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 .video-grid {
