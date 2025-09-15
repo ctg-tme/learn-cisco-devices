@@ -345,22 +345,24 @@ h3.video-title {
 
 .close-button {
   position: absolute;
-  top: -50px;
-  left: 0;
-  background: rgba(71, 142, 255, 0.8);
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.7);
   border: none;
   color: #FFFFFF;
   font-size: 16px;
   padding: 10px 20px;
   border-radius: 25px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  z-index: 10;
 }
 
 .close-button:hover {
-  background: #478eff;
+  background: rgba(0, 0, 0, 0.9);
   color: #FFFFFF;
+  transform: scale(1.05);
 }
 
 .section {
@@ -457,7 +459,8 @@ body.dark-theme .deployment-card:hover {
   }
   
   .close-button {
-    top: -40px;
+    top: 15px;
+    left: 15px;
     font-size: 14px;
     padding: 8px 16px;
   }
