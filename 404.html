@@ -28,6 +28,30 @@
   <div id="app"></div>
 
   <script src="/learn-cisco-devices/shared/scripts/config.js"></script>
+  <script>
+    // GitHub Pages SPA routing - redirect 404s to proper routes
+    (function() {
+      const path = window.location.pathname;
+      const params = window.location.search;
+      
+      // If we're on a 404 page but the path looks like a valid route
+      if (path !== '/' && path !== '/index.html' && path !== window.SPA_CONFIG.REPO_NAME + '/' && path !== window.SPA_CONFIG.REPO_NAME + '/index.html') {
+        // Extract the route part after the repo name
+        const repoName = window.SPA_CONFIG.REPO_NAME;
+        let routePath = path;
+        
+        if (path.startsWith(repoName)) {
+          routePath = path.substring(repoName.length);
+        }
+        
+        // Redirect to repo root with the path as a parameter for the SPA to handle
+        const baseUrl = window.location.origin + repoName + '/';
+        const newUrl = baseUrl + params + (params ? '&' : '?') + 'route=' + encodeURIComponent(routePath);
+        window.location.replace(newUrl);
+      }
+    })();
+  </script>
+  
   <script src="/learn-cisco-devices/shared/scripts/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,100 @@
+{
+  "homepage": {
+    "title": "Learn Cisco Devices - Deployment Selection",
+    "type": "selector",
+    "header": {
+      "title": "Learn how to use your Cisco device",
+      "subtitle": "Select your deployment type to view relevant tutorials"
+    },
+    "deployments": [
+      {
+        "id": "mtr-navigator",
+        "name": "Microsoft Teams Rooms",
+        "subtitle": "with Cisco Navigator",
+        "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_navigator.png"
+      }
+    ]
+  },
+  "mtr-navigator": {
+    "title": "Learn Cisco Devices - Microsoft Teams Rooms with Navigator",
+    "type": "deployment",
+    "header": {
+      "title": "Learn how to use your Cisco device",
+      "subtitle": "Video tutorials for Microsoft Teams Rooms with Navigator"
+    },
+    "sections": [
+      {
+        "id": "create",
+        "title": "Create a Meeting",
+        "videos": [
+          {
+            "title": "Schedule a meeting with Microsoft Teams Calendar",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
+            "video": "mtr-navigator/videos/mtr_navigator_schedule_teams.webm",
+            "tags": ["teams", "calendar"]
+          },
+          {
+            "title": "Meet now with Cisco Navigator",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_navigator.png",
+            "video": "mtr-navigator/videos/mtr_navigator_schedule_navigator.webm",
+            "tags": ["navigator", "cisco"]
+          }
+        ]
+      },
+      {
+        "id": "join",
+        "title": "Join a Meeting",
+        "videos": [
+          {
+            "title": "Join a meeting from your device",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_join_device.png",
+            "video": "mtr-navigator/videos/mtr_navigator_join_device.webm",
+            "tags": ["device", "teams"]
+          },
+          {
+            "title": "Join a meeting with QR code",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_join_qr.png",
+            "video": "mtr-navigator/videos/mtr_navigator_join_qr.webm",
+            "tags": ["qr", "mobile"]
+          },
+          {
+            "title": "Join a Webex/Zoom meeting with meeting ID",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_join_webex_zoom_id.png",
+            "video": "mtr-navigator/videos/mtr_navigator_join_webex_zoom_id.webm",
+            "tags": ["third-party", "webex", "zoom"]
+          },
+          {
+            "title": "Join with room audio",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_join_room_audio.png",
+            "video": "mtr-navigator/videos/mtr_navigator_join_room_audio.webm",
+            "tags": ["audio", "room"]
+          }
+        ]
+      },
+      {
+        "id": "share",
+        "title": "Share Content",
+        "videos": [
+          {
+            "title": "Share content during a Microsoft Teams Room meeting",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_share_teams_meeting.png",
+            "video": "mtr-navigator/videos/mtr_navigator_share_teams_meeting.webm",
+            "tags": ["teams", "share"]
+          },
+          {
+            "title": "Share with PowerPoint Live",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_share_powerpoint.png",
+            "video": "mtr-navigator/videos/mtr_navigator_share_powerpoint.webm",
+            "tags": ["powerpoint", "office"]
+          },
+          {
+            "title": "Share with Miracast",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_share_miracast.png",
+            "video": "mtr-navigator/videos/mtr_navigator_share_miracast.webm",
+            "tags": ["miracast", "wireless"]
+          }
+        ]
+      }
+    ]
+  }
+}
