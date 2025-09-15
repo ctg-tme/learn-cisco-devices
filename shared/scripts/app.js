@@ -465,34 +465,46 @@ class CiscoDeviceApp {
   }
 
   addScrollIndicator() {
-    // Remove existing scroll indicator
-    const existingIndicator = document.querySelector('.scroll-indicator');
-    if (existingIndicator) {
-      existingIndicator.remove();
-    }
+    // Remove existing scroll indicators
+    const existingIndicators = document.querySelectorAll('.scroll-indicator');
+    existingIndicators.forEach(indicator => indicator.remove());
 
     // Check if page content is scrollable
     const hasScroll = document.body.scrollHeight > window.innerHeight;
     
     if (hasScroll) {
-      const scrollIndicator = document.createElement('div');
-      scrollIndicator.className = 'scroll-indicator';
-      scrollIndicator.innerHTML = `
-        <div class="scroll-arrow"></div>
-      `;
+      // Create down arrow indicator
+      const downIndicator = document.createElement('div');
+      downIndicator.className = 'scroll-indicator down';
+      downIndicator.innerHTML = `<div class="scroll-arrow down"></div>`;
       
-      document.body.appendChild(scrollIndicator);
+      // Create up arrow indicator
+      const upIndicator = document.createElement('div');
+      upIndicator.className = 'scroll-indicator up hidden';
+      upIndicator.innerHTML = `<div class="scroll-arrow up"></div>`;
       
-      // Hide indicator when user scrolls near bottom
+      document.body.appendChild(downIndicator);
+      document.body.appendChild(upIndicator);
+      
+      // Handle scroll events
       const handleScroll = () => {
         const scrollPosition = window.scrollY + window.innerHeight;
         const documentHeight = document.body.scrollHeight;
         const threshold = 200; // Hide when within 200px of bottom
+        const topThreshold = 100; // Show up arrow when scrolled down 100px
         
+        // Down arrow logic
         if (scrollPosition >= documentHeight - threshold) {
-          scrollIndicator.classList.add('hidden');
+          downIndicator.classList.add('hidden');
         } else {
-          scrollIndicator.classList.remove('hidden');
+          downIndicator.classList.remove('hidden');
+        }
+        
+        // Up arrow logic
+        if (window.scrollY > topThreshold) {
+          upIndicator.classList.remove('hidden');
+        } else {
+          upIndicator.classList.add('hidden');
         }
       };
       
@@ -501,8 +513,11 @@ class CiscoDeviceApp {
       // Clean up on page navigation
       const cleanup = () => {
         window.removeEventListener('scroll', handleScroll);
-        if (scrollIndicator.parentNode) {
-          scrollIndicator.remove();
+        if (downIndicator.parentNode) {
+          downIndicator.remove();
+        }
+        if (upIndicator.parentNode) {
+          upIndicator.remove();
         }
       };
       

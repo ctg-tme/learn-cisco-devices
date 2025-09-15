@@ -94,16 +94,23 @@ body.dark-theme .video-card {
   border: 1px solid #555;
 }
 
-/* Scroll indicator */
+/* Scroll indicators */
 .scroll-indicator {
   position: fixed;
-  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
   opacity: 0.7;
   transition: opacity 0.3s ease;
   pointer-events: none;
+}
+
+.scroll-indicator.down {
+  bottom: 20px;
+}
+
+.scroll-indicator.up {
+  top: 20px;
 }
 
 .scroll-indicator.hidden {
@@ -122,7 +129,7 @@ body.dark-theme .video-card {
   position: relative;
 }
 
-.scroll-arrow::after {
+.scroll-arrow.down::after {
   content: '';
   width: 12px;
   height: 12px;
@@ -130,6 +137,16 @@ body.dark-theme .video-card {
   border-bottom: 2px solid white;
   transform: rotate(45deg);
   margin-top: -3px;
+}
+
+.scroll-arrow.up::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-135deg);
+  margin-top: 3px;
 }
 
 .scroll-text {
