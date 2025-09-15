@@ -462,12 +462,52 @@ async function init() {
 
   if (!checkRoomOS) {
     let msg = { Title: `Macro Requires a RoomOS Update`, Text: `The [${_main_macro_name()}] macro requires RoomOS Version ${minimumRoomOSversion} or higher for optimal use. Check Macro Log for more details` };
-
     await xapi.Command.UserInterface.Message.Alert.Display(msg);
-
     msg['MoreDetails'] = `This solution is using new API parameters found in RoomOS ${minimumRoomOSversion}. Using older RoomOS software can lead to a poor UX or Errors. Please update your system to the latest Stable Release software or newer`
-
     throw new Error(msg)
+  }
+
+  /** Configure Device to enable WebEngine use */
+  try {
+    await xapi.Config.WebEngine.Mode.set('On');
+  } catch (e) {
+    console.error('Error setting WebEngine.Mode:', e);
+  }
+
+  try {
+    await xapi.Config.WebEngine.Features.AllowDeviceCertificate.set('True');
+  } catch (e) {
+    console.error('Error setting WebEngine.Features.AllowDeviceCertificate:', e);
+  }
+
+  try {
+    await xapi.Config.WebEngine.Features.GpuRasterization.set('On');
+  } catch (e) {
+    console.error('Error setting WebEngine.Features.GpuRasterization:', e);
+  }
+
+  try {
+    await xapi.Config.WebEngine.Features.WebGL.set('On');
+  } catch (e) {
+    console.error('Error setting WebEngine.Features.WebGL:', e);
+  }
+
+  try {
+    await xapi.Config.WebEngine.Features.Xapi.Peripherals.AllowedHosts.Hosts.set('*');
+  } catch (e) {
+    console.error('Error setting WebEngine.Features.Xapi.Peripherals.AllowedHosts.Hosts:', e);
+  }
+
+  try {
+    await xapi.Config.WebEngine.Features.Peripherals.WebGL.set('On');
+  } catch (e) {
+    console.error('Error setting WebEngine.Features.Peripherals.WebGL:', e);
+  }
+
+  try {
+    await xapi.Config.WebEngine.Features.Peripherals.AudioOutput.set('On');
+  } catch (e) {
+    console.error('Error setting WebEngine.Features.Peripherals.AudioOutput:', e);
   }
 
   try {
