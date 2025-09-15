@@ -32,7 +32,7 @@ class CiscoDeviceApp {
   async init() {
     try {
       // Log user agent info for debugging
-      this.logUserAgent();
+      //this.logUserAgent();
       
       // Check if we have a route parameter from GitHub Pages 404 redirect
       const routeParam = this.urlParams.get('route');
@@ -479,7 +479,6 @@ class CiscoDeviceApp {
       scrollIndicator.className = 'scroll-indicator';
       scrollIndicator.innerHTML = `
         <div class="scroll-arrow"></div>
-        <div class="scroll-text">More videos below</div>
       `;
       
       document.body.appendChild(scrollIndicator);

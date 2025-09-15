@@ -111,12 +111,25 @@ body.dark-theme .video-card {
 }
 
 .scroll-arrow {
-  width: 30px;
-  height: 30px;
-  border-right: 3px solid #007acc;
-  border-bottom: 3px solid #007acc;
-  transform: rotate(45deg);
+  width: 40px;
+  height: 40px;
+  background: #007acc;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   animation: bounce 2s infinite;
+  position: relative;
+}
+
+.scroll-arrow::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg);
+  margin-top: -3px;
 }
 
 .scroll-text {
@@ -129,23 +142,19 @@ body.dark-theme .video-card {
 
 @keyframes bounce {
   0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0) rotate(45deg);
+    transform: translateY(0);
   }
   40% {
-    transform: translateY(-10px) rotate(45deg);
+    transform: translateY(-10px);
   }
   60% {
-    transform: translateY(-5px) rotate(45deg);
+    transform: translateY(-5px);
   }
 }
 
 /* Dark theme scroll indicator */
 body.dark-theme .scroll-arrow {
-  border-color: #4a9eff;
-}
-
-body.dark-theme .scroll-text {
-  color: #4a9eff;
+  background: #4a9eff;
 }
 
 body.dark-theme .video-card:hover {
