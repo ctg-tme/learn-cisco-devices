@@ -324,6 +324,8 @@ class CiscoDeviceApp {
       </div>
     `;
 
+    // Add scroll indicator if content overflows
+    this.addScrollIndicator();
     this.setupEventListeners();
   }
 
@@ -460,6 +462,54 @@ class CiscoDeviceApp {
     // Update browser history and handle route
     history.pushState(null, '', newUrl.toString());
     this.handleRoute();
+  }
+
+  addScrollIndicator() {
+    // Remove existing scroll indicator
+    const existingIndicator = document.querySelector('.scroll-indicator');
+    if (existingIndicator) {
+      existingIndicator.remove();
+    }
+
+    // Check if page content is scrollable
+    const hasScroll = document.body.scrollHeight > window.innerHeight;
+    
+    if (hasScroll) {
+      const scrollIndicator = document.createElement('div');
+      scrollIndicator.className = 'scroll-indicator';
+      scrollIndicator.innerHTML = `
+        <div class="scroll-arrow"></div>
+        <div class="scroll-text">More videos below</div>
+      `;
+      
+      document.body.appendChild(scrollIndicator);
+      
+      // Hide indicator when user scrolls near bottom
+      const handleScroll = () => {
+        const scrollPosition = window.scrollY + window.innerHeight;
+        const documentHeight = document.body.scrollHeight;
+        const threshold = 200; // Hide when within 200px of bottom
+        
+        if (scrollPosition >= documentHeight - threshold) {
+          scrollIndicator.classList.add('hidden');
+        } else {
+          scrollIndicator.classList.remove('hidden');
+        }
+      };
+      
+      window.addEventListener('scroll', handleScroll);
+      
+      // Clean up on page navigation
+      const cleanup = () => {
+        window.removeEventListener('scroll', handleScroll);
+        if (scrollIndicator.parentNode) {
+          scrollIndicator.remove();
+        }
+      };
+      
+      // Store cleanup function for later use
+      this.scrollIndicatorCleanup = cleanup;
+    }
   }
 
   render404() {
