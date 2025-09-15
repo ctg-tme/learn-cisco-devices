@@ -29,12 +29,12 @@ A modular video tutorial platform for different Cisco device deployment types.
 
 ## URL Parameters
 
-- `?theme=classic` - Switch to white text on dark grey theme
+- `?theme=dark` - Switch to white text on dark grey theme
 - `?qr=false` - Hide QR code
 
 Examples:
-- `/mtr-navigator/?theme=classic&qr=false`
-- `/webex-room-kit/?theme=classic`
+- `/mtr-navigator/?theme=dark&qr=false`
+- `/webex-room-kit/?theme=dark`
 
 ## Features
 
