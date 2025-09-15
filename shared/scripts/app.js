@@ -548,10 +548,13 @@ class CiscoDeviceApp {
     const existingIndicators = document.querySelectorAll('.scroll-indicator');
     existingIndicators.forEach(indicator => indicator.remove());
 
-    // Check if page content is scrollable
+    // Check if page content is scrollable and device is Cisco
     const hasScroll = document.body.scrollHeight > window.innerHeight;
+    const isCiscoNavigator = navigator.userAgent.includes('Cisco Room Navigator');
+    const isRoomOS = navigator.userAgent.includes('RoomOS');
+    const shouldShowScrollArrows = isCiscoNavigator || isRoomOS;
     
-    if (hasScroll) {
+    if (hasScroll && shouldShowScrollArrows) {
       // Create down arrow indicator
       const downIndicator = document.createElement('div');
       downIndicator.className = 'scroll-indicator down';
