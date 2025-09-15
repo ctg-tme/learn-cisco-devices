@@ -368,6 +368,12 @@ class CiscoDeviceApp {
     const modalVideo = document.getElementById('modalVideo');
     const modalGif = document.getElementById('modalGif');
     
+    // Clear any existing auto-close timers
+    if (this.autoCloseTimer) {
+      clearTimeout(this.autoCloseTimer);
+      this.autoCloseTimer = null;
+    }
+    
     // Check if the file is a GIF
     const isGif = mediaSrc.toLowerCase().endsWith('.gif');
     
@@ -381,6 +387,15 @@ class CiscoDeviceApp {
       modalGif.style.display = 'none';
       modalVideo.style.display = 'block';
       modalVideo.src = mediaSrc;
+      
+      // Set up video end detection and auto-close
+      const handleVideoEnd = () => {
+        this.startAutoCloseTimer();
+      };
+      
+      // Remove any existing event listeners
+      modalVideo.removeEventListener('ended', handleVideoEnd);
+      modalVideo.addEventListener('ended', handleVideoEnd);
       
       // Auto-play the video
       modalVideo.play().catch(e => {
@@ -416,10 +431,56 @@ class CiscoDeviceApp {
     this.openModal(videoSrc);
   }
 
+  startAutoCloseTimer() {
+    // Clear any existing timer
+    if (this.autoCloseTimer) {
+      clearTimeout(this.autoCloseTimer);
+    }
+    
+    // Set up user activity detection
+    let lastActivity = Date.now();
+    
+    const resetActivityTimer = () => {
+      lastActivity = Date.now();
+    };
+    
+    // Listen for user activity
+    const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    activityEvents.forEach(event => {
+      document.addEventListener(event, resetActivityTimer, { passive: true });
+    });
+    
+    // Check for inactivity every 5 seconds
+    const checkInactivity = () => {
+      const inactiveTime = Date.now() - lastActivity;
+      const inactivityThreshold = 30000; // 30 seconds of inactivity
+      
+      if (inactiveTime >= inactivityThreshold) {
+        // Clean up activity listeners
+        activityEvents.forEach(event => {
+          document.removeEventListener(event, resetActivityTimer);
+        });
+        this.closeModal();
+      } else {
+        // Continue checking
+        this.autoCloseTimer = setTimeout(checkInactivity, 5000);
+      }
+    };
+    
+    // Start the inactivity check
+    this.autoCloseTimer = setTimeout(checkInactivity, 5000);
+  }
+
   closeModal() {
     const modal = document.getElementById('videoModal');
     const modalVideo = document.getElementById('modalVideo');
     const modalGif = document.getElementById('modalGif');
+    
+    // Clear auto-close timer
+    if (this.autoCloseTimer) {
+      clearTimeout(this.autoCloseTimer);
+      this.autoCloseTimer = null;
+    }
     
     modal.classList.remove('active');
     modalVideo.pause();
