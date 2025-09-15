@@ -85,6 +85,22 @@ class CiscoDeviceApp {
     }
   }
 
+  getUserAgentInfo() {
+    return {
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      language: navigator.language,
+      cookieEnabled: navigator.cookieEnabled,
+      onLine: navigator.onLine
+    };
+  }
+
+  logUserAgent() {
+    const info = this.getUserAgentInfo();
+    console.log('Browser Info:', info);
+    return info;
+  }
+
   handleRoute() {
     const path = window.location.pathname;
     const routeName = this.getRouteFromPath(path);
@@ -225,6 +241,19 @@ class CiscoDeviceApp {
       qrCode.style.display = 'none';
     }
 
+    // Show debug info if requested
+    const showDebug = this.urlParams.get('debug') === 'true';
+    const debugHtml = showDebug ? `
+      <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; font-family: monospace; font-size: 12px;">
+        <strong>Debug Info:</strong><br>
+        User Agent: ${navigator.userAgent}<br>
+        Platform: ${navigator.platform}<br>
+        Language: ${navigator.language}<br>
+        Screen: ${screen.width}x${screen.height}<br>
+        Viewport: ${window.innerWidth}x${window.innerHeight}
+      </div>
+    ` : '';
+
     // Set page title
     document.title = config.title;
 
@@ -269,6 +298,7 @@ class CiscoDeviceApp {
     const appContainer = document.getElementById('app');
     appContainer.innerHTML = `
       ${headerHtml}
+      ${debugHtml}
       <div class="container">
         ${sectionsHtml}
       </div>
