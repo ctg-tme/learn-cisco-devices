@@ -297,7 +297,7 @@ class CiscoDeviceApp {
         <div class="video-card" onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')">
           <div class="video-thumbnail">
             <img src="${this.getAbsolutePath(video.thumbnail)}" alt="${video.title}">
-            <div class="play-button">▶</div>
+            <div class="play-button"></div>
           </div>
           <div class="video-info">
             <h3 class="video-title">${video.title}</h3>
