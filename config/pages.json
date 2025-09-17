@@ -46,7 +46,7 @@
         "title": "Join a Meeting",
         "videos": [
           {
-            "title": "Join a scheudled meeting",
+            "title": "Join a scheduled meeting",
             "thumbnail": "mtr-navigator/images/mtr_navigator_join_scheduled_meeting.png",
             "video": "mtr-navigator/videos/mtr_navigator_join_scheduled_meeting.webm",
             "tags": ["device", "teams"]
