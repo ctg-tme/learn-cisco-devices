@@ -76,9 +76,9 @@
         "title": "Share Content",
         "videos": [
           {
-            "title": "Share content during a Microsoft Teams Room meeting",
-            "thumbnail": "mtr-navigator/images/mtr_navigator_share_teams_meeting.png",
-            "video": "mtr-navigator/videos/mtr_navigator_share_teams_meeting.webm",
+            "title": "Share content using a wired connection",
+            "thumbnail": "mtr-navigator/images/mtr_navigator_share_wired_connection.png",
+            "video": "mtr-navigator/videos/mtr_navigator_share_wired_connection.webm",
             "tags": ["teams", "share"]
           },
           {
