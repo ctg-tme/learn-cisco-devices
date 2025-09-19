@@ -262,32 +262,7 @@ class CiscoDeviceApp {
       currentUrl.searchParams.set('qr', 'false');
       const urlWithQrFalse = encodeURIComponent(currentUrl.toString());
       const qrSize = '200x200'; // Default size, can be made configurable
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${urlWithQrFalse}&size=${qrSize}`;
-      
-      // Add error handling for QR code loading
-      qrImage.onload = () => {
-        console.log('QR code loaded successfully');
-      };
-      
-      qrImage.onerror = (error) => {
-        console.error('QR code failed to load:', error);
-        console.log('QR API URL:', qrApiUrl);
-        console.log('User Agent:', navigator.userAgent);
-        
-        // Replace broken image with text fallback
-        qrCode.innerHTML = `
-          <div style="padding: 15px; background: #f0f0f0; border-radius: 8px; text-align: center; font-size: 14px; border: 2px dashed #ccc;">
-            <div style="font-weight: bold; margin-bottom: 8px;">📱 Mobile Access</div>
-            <div style="font-size: 12px; color: #666; margin-bottom: 8px;">QR code unavailable</div>
-            <div style="word-break: break-all; font-family: monospace; font-size: 11px; background: white; padding: 8px; border-radius: 4px;">
-              ${currentUrl.toString()}
-            </div>
-            <div style="font-size: 11px; color: #888; margin-top: 8px;">Copy this URL to your mobile device</div>
-          </div>
-        `;
-      };
-      
-      qrImage.src = qrApiUrl;
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?data=${urlWithQrFalse}&size=${qrSize}`;
       qrImage.alt = 'QR Code for current page';
       qrCode.style.display = 'block';
     } else {
@@ -303,10 +278,7 @@ class CiscoDeviceApp {
         Platform: ${navigator.platform}<br>
         Language: ${navigator.language}<br>
         Screen: ${screen.width}x${screen.height}<br>
-        Viewport: ${window.innerWidth}x${window.innerHeight}<br>
-        QR Code Shown: ${showQRCode}<br>
-        Is Cisco Navigator: ${isCiscoNavigator}<br>
-        Is RoomOS: ${isRoomOS}
+        Viewport: ${window.innerWidth}x${window.innerHeight}
       </div>
     ` : '';
 
