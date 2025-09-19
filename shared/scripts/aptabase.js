@@ -10,32 +10,67 @@ async function _handleAptaEvent(eventName, properties) {
 window.aptabaseEvent = _handleAptaEvent;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    IS_DEBUG_SESSION = window.location.hostname === '127.0.0.1';
-    
+    const host = window.location.hostname;
+    IS_DEBUG_SESSION = host === '127.0.0.1' || host === 'localhost';
+
+    // Helper to fetch JSON with graceful failure
+    const fetchJson = async (url) => {
+        try {
+            const res = await fetch(url, { cache: 'no-store' });
+            if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+            return await res.json();
+        } catch (e) {
+            return null;
+        }
+    };
+
     try {
-        const manifest = await fetch('./manifest.json').then(r => r.json());
-        const version = manifest.Version;
-        const aptaKey = manifest.Aptabase;
-        
-        if (aptaKey === 'aptabase_api_key_placeholder') {
-            console.warn('AptaKey Not Available - using placeholder');
+        // Try local manifest first (ignored by git), then default manifest
+        const localManifest = await fetchJson('./manifest.local.json');
+        const manifest = localManifest || (await fetchJson('./manifest.json')) || {};
+
+        const version = manifest.Version || 'dev';
+        let aptaKey = manifest.Aptabase || 'aptabase_api_key_placeholder';
+
+        // Allow override via query param for local testing: ?apta=KEY
+        const params = new URLSearchParams(window.location.search);
+        const paramKey = params.get('apta');
+        if (paramKey) {
+            aptaKey = paramKey.trim();
+            try { sessionStorage.setItem('apta_override', aptaKey); } catch {}
+        } else {
+            // If previously set in this session, reuse it
+            try {
+                const saved = sessionStorage.getItem('apta_override');
+                if (saved) aptaKey = saved;
+            } catch {}
+        }
+
+        if (aptaKey === 'aptabase_api_key_placeholder' || !aptaKey) {
+            // Suppress noisy warning in local debug; still inform in console once
+            const msg = 'Aptabase key not available (placeholder). Skipping analytics init.';
+            if (IS_DEBUG_SESSION) {
+                console.debug(msg);
+            } else {
+                console.warn(msg);
+            }
             return;
         }
-        
-        console.log('Initializing Aptabase with version:', version, { isDebug: IS_DEBUG_SESSION });
-        
-        initializeAptabase(aptaKey, { 
-            isDebug: IS_DEBUG_SESSION, 
-            appVersion: version 
+
+        console.log('Initializing Aptabase', { version, isDebug: IS_DEBUG_SESSION });
+
+        initializeAptabase(aptaKey, {
+            isDebug: IS_DEBUG_SESSION,
+            appVersion: version
         });
-        
+
         // Track initial page load
         window.aptabaseEvent('page_loaded', {
-            'page': window.location.pathname,
-            'hostname': window.location.hostname,
-            'user_agent': navigator.userAgent
+            page: window.location.pathname,
+            hostname: window.location.hostname,
+            user_agent: navigator.userAgent
         });
-        
+
     } catch (error) {
         console.error('Failed to initialize Aptabase:', error);
     }

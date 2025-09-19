@@ -57,3 +57,6 @@ Icon?
 # Temporary files
 *.tmp
 *.temp
+
+# Local manifest for Aptabase testing (do not commit)
+manifest.local.json
