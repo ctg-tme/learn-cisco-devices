@@ -179,18 +179,18 @@ class CiscoDeviceApp {
           <h1>${config.header.title}</h1>
           <p class="subtitle">${config.header.subtitle}</p>
         </header>
-        <section class="deployment-grid" role="list" aria-label="Available device tutorials">
+        <ul class="deployment-grid" aria-label="Available device tutorials">
           ${deployments.map(deployment => `
-            <article class="deployment-card" data-route="${deployment.id}" role="listitem" tabindex="0" 
-                     aria-label="Open ${deployment.name} ${deployment.subtitle} tutorials">
+            <li class="deployment-card" data-route="${deployment.id}" tabindex="0" 
+                aria-label="Open ${deployment.name} ${deployment.subtitle} tutorials">
               <img src="${this.getAbsolutePath(deployment.thumbnail)}" alt="" class="deployment-thumbnail" role="presentation">
               <div class="deployment-info">
-                <h3 class="deployment-name">${deployment.name}</h3>
+                <h2 class="deployment-name">${deployment.name}</h2>
                 <p class="deployment-subtitle">${deployment.subtitle}</p>
               </div>
-            </article>
+            </li>
           `).join('')}
-        </section>
+        </ul>
       </div>
     `;
     

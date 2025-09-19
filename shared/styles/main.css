@@ -370,7 +370,19 @@ body.dark-theme .modal {
   gap: 2rem;
   margin-top: 2rem;
   width: 100%;
-  max-width: 100%;
+}
+
+/* Limit single items to 50% width on larger screens */
+.video-grid:has(li:only-child) {
+  grid-template-columns: minmax(300px, 50%);
+  justify-content: start;
+}
+
+/* Fallback for browsers that don't support :has() */
+@supports not selector(:has(*)) {
+  .video-grid li:only-child {
+    max-width: 50%;
+  }
 }
 
 .video-card {
@@ -512,6 +524,31 @@ h3.video-title {
   text-align: left;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #26384f;
+}
+
+/* Deployment grid layout */
+.deployment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Limit single deployment items to 50% width on larger screens */
+.deployment-grid:has(li:only-child) {
+  grid-template-columns: minmax(300px, 50%);
+  justify-content: start;
+}
+
+/* Fallback for browsers that don't support :has() */
+@supports not selector(:has(*)) {
+  .deployment-grid li:only-child {
+    max-width: 50%;
+  }
 }
 
 /* Deployment card styles */
