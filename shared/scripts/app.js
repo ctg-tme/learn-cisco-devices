@@ -368,6 +368,15 @@ class CiscoDeviceApp {
     const modalVideo = document.getElementById('modalVideo');
     const modalGif = document.getElementById('modalGif');
     
+    // Track modal opening event
+    if (window.aptabaseEvent) {
+      window.aptabaseEvent('modal_opened', {
+        'modal_name': 'videoModal',
+        'media_src': mediaSrc,
+        'current_route': window.location.pathname
+      });
+    }
+    
     // Clear any existing auto-close timers
     if (this.autoCloseTimer) {
       clearTimeout(this.autoCloseTimer);
@@ -400,8 +409,25 @@ class CiscoDeviceApp {
       modalVideo.addEventListener('ended', handleVideoEnd);
       
       // Auto-play the video
-      modalVideo.play().catch(e => {
+      modalVideo.play().then(() => {
+        // Track video play event
+        if (window.aptabaseEvent) {
+          window.aptabaseEvent('video_played', {
+            'video_src': mediaSrc,
+            'auto_play': true,
+            'current_route': window.location.pathname
+          });
+        }
+      }).catch(e => {
         console.log('Autoplay prevented by browser:', e);
+        // Track autoplay failure
+        if (window.aptabaseEvent) {
+          window.aptabaseEvent('video_autoplay_failed', {
+            'video_src': mediaSrc,
+            'error': e.message,
+            'current_route': window.location.pathname
+          });
+        }
       });
     }
     
@@ -494,6 +520,14 @@ class CiscoDeviceApp {
     const modalVideo = document.getElementById('modalVideo');
     const modalGif = document.getElementById('modalGif');
     
+    // Track modal closing event
+    if (window.aptabaseEvent) {
+      window.aptabaseEvent('modal_closed', {
+        'modal_name': 'videoModal',
+        'current_route': window.location.pathname
+      });
+    }
+    
     // Clear auto-close timer
     if (this.autoCloseTimer) {
       clearTimeout(this.autoCloseTimer);
@@ -540,6 +574,16 @@ class CiscoDeviceApp {
     
     // Update browser history and handle route
     history.pushState(null, '', newUrl.toString());
+    
+    // Track navigation event
+    if (window.aptabaseEvent) {
+      window.aptabaseEvent('page_navigation', {
+        'from_route': window.location.pathname,
+        'to_route': fullPath,
+        'navigation_type': 'internal'
+      });
+    }
+    
     this.handleRoute();
   }
 
