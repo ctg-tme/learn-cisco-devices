@@ -302,18 +302,19 @@ class CiscoDeviceApp {
       if (filteredVideos.length === 0) return '';
       
       const videosHtml = filteredVideos.map((video, index) => `
-        <article class="video-card" tabindex="0" role="button" 
-                 aria-label="Play tutorial: ${video.title}"
-                 data-video-src="${this.getAbsolutePath(video.video)}"
-                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')}"
-                 onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')">
-          <div class="video-thumbnail">
-            <img src="${this.getAbsolutePath(video.thumbnail)}" alt="" role="presentation">
-            <div class="play-button" aria-hidden="true"></div>
-          </div>
-          <div class="video-info">
-            <h3 class="video-title">${video.title}</h3>
-          </div>
+        <article class="video-card" role="listitem">
+          <button class="video-button" 
+                  aria-label="Play tutorial: ${video.title}"
+                  data-video-src="${this.getAbsolutePath(video.video)}"
+                  onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')">
+            <div class="video-thumbnail">
+              <img src="${this.getAbsolutePath(video.thumbnail)}" alt="" role="presentation">
+              <div class="play-button" aria-hidden="true"></div>
+            </div>
+            <div class="video-info">
+              <h3 class="video-title">${video.title}</h3>
+            </div>
+          </button>
         </article>
       `).join('');
 
