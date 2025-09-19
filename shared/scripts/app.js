@@ -472,15 +472,21 @@ class CiscoDeviceApp {
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     
-    // Focus management - focus the close button for keyboard users
-    const closeButton = document.getElementById('closeModal');
-    setTimeout(() => closeButton.focus(), 100);
+    // Only apply focus management for non-touch devices to avoid conflicts with auto-close
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isCiscoDevice = navigator.userAgent.includes('Cisco Room Navigator') || navigator.userAgent.includes('RoomOS');
+    
+    if (!isTouchDevice && !isCiscoDevice) {
+      // Focus management - focus the close button for keyboard users
+      const closeButton = document.getElementById('closeModal');
+      setTimeout(() => closeButton.focus(), 100);
+      
+      // Trap focus within modal
+      this.trapFocus(modal);
+    }
     
     // Announce video opening to screen readers
     this.announceToScreenReader(`Video opened: ${videoTitle}. Use video controls or press Escape to close.`);
-    
-    // Trap focus within modal
-    this.trapFocus(modal);
 
     // Close modal when clicking on background or pressing Escape
     const handleModalClick = (e) => {
@@ -536,8 +542,8 @@ class CiscoDeviceApp {
       lastActivity = Date.now();
     };
     
-    // Listen for user activity
-    const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    // Listen for user activity - enhanced for touch devices
+    const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'touchmove', 'touchend', 'click', 'pointerdown', 'pointermove'];
     activityEvents.forEach(event => {
       document.addEventListener(event, resetActivityTimer, { passive: true });
     });
