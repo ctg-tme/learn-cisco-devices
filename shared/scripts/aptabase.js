@@ -3,7 +3,16 @@ import { init as initializeAptabase, trackEvent as aptaEvent } from 'https://cdn
 let IS_DEBUG_SESSION = false;
 
 async function _handleAptaEvent(eventName, properties) {
-    aptaEvent(eventName, properties);
+    try {
+        if (!window.aptabaseReady) {
+            // The SDK queues events internally, but log readiness for clarity
+            console.debug('[Aptabase] Tracking event before ready:', eventName, properties);
+        }
+        aptaEvent(eventName, properties);
+        console.debug('[Aptabase] Tracked event:', eventName, properties);
+    } catch (e) {
+        console.error('[Aptabase] Failed to track event:', eventName, e);
+    }
 }
 
 // Make the function globally available
@@ -67,6 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             isDebug: IS_DEBUG_SESSION,
             appVersion: version
         });
+        window.aptabaseReady = true;
 
         // Track initial page load
         window.aptabaseEvent('page_loaded', {
