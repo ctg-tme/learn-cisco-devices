@@ -25,9 +25,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     try {
+        // Determine repo base path for GitHub Pages (e.g., '/learn-cisco-devices')
+        const repoBase = (window.SPA_CONFIG && window.SPA_CONFIG.REPO_NAME) ? window.SPA_CONFIG.REPO_NAME : '';
+        const basePath = repoBase.startsWith('/') ? repoBase : `/${repoBase}`;
+
         // Try local manifest first (ignored by git), then default manifest
-        const localManifest = await fetchJson('./manifest.local.json');
-        const manifest = localManifest || (await fetchJson('./manifest.json')) || {};
+        const localManifest = await fetchJson(`${basePath}/manifest.local.json`);
+        const manifest = localManifest || (await fetchJson(`${basePath}/manifest.json`)) || {};
 
         const version = manifest.Version || 'dev';
         let aptaKey = manifest.Aptabase || 'aptabase_api_key_placeholder';
