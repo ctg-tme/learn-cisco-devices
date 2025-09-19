@@ -4,12 +4,7 @@ let IS_DEBUG_SESSION = false;
 
 async function _handleAptaEvent(eventName, properties) {
     try {
-        if (!window.aptabaseReady) {
-            // The SDK queues events internally, but log readiness for clarity
-            console.debug('[Aptabase] Tracking event before ready:', eventName, properties);
-        }
         aptaEvent(eventName, properties);
-        console.debug('[Aptabase] Tracked event:', eventName, properties);
     } catch (e) {
         console.error('[Aptabase] Failed to track event:', eventName, e);
     }
@@ -60,17 +55,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (aptaKey === 'aptabase_api_key_placeholder' || !aptaKey) {
-            // Suppress noisy warning in local debug; still inform in console once
-            const msg = 'Aptabase key not available (placeholder). Skipping analytics init.';
-            if (IS_DEBUG_SESSION) {
-                console.debug(msg);
-            } else {
-                console.warn(msg);
-            }
+            // Aptabase key not available (placeholder). Skipping analytics init.
             return;
         }
 
-        console.log('Initializing Aptabase', { version, isDebug: IS_DEBUG_SESSION });
 
         initializeAptabase(aptaKey, {
             isDebug: IS_DEBUG_SESSION,

@@ -100,7 +100,6 @@ class CiscoDeviceApp {
 
   logUserAgent() {
     const info = this.getUserAgentInfo();
-    console.log('Browser Info:', info);
     return info;
   }
 
@@ -430,7 +429,6 @@ class CiscoDeviceApp {
           });
         }
       }).catch(e => {
-        console.log('Autoplay prevented by browser:', e);
         // Track autoplay failure - important for understanding user experience
         if (window.aptabaseEvent) {
           window.aptabaseEvent('video_autoplay_failed', {
