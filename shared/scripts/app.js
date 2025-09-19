@@ -621,11 +621,23 @@ class CiscoDeviceApp {
   }
 
   getVideoTitle(mediaSrc) {
-    // Extract a readable title from the video file path
-    const filename = mediaSrc.split('/').pop(); // Get filename
+    // Extract a readable title from the video file path with input validation
+    if (!mediaSrc || typeof mediaSrc !== 'string') {
+      return 'Unknown Video';
+    }
+    
+    // Sanitize the input to prevent potential issues
+    const sanitizedSrc = mediaSrc.replace(/[<>'"&]/g, '');
+    const filename = sanitizedSrc.split('/').pop(); // Get filename
+    
+    if (!filename) {
+      return 'Unknown Video';
+    }
+    
     const nameWithoutExt = filename.split('.')[0]; // Remove extension
-    // Convert underscores to spaces and title case
-    return nameWithoutExt.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    // Convert underscores to spaces and title case, limit length
+    const title = nameWithoutExt.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return title.length > 100 ? title.substring(0, 100) + '...' : title;
   }
 
   addScrollIndicator() {

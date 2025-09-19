@@ -1,3 +1,4 @@
+// Note: Consider hosting Aptabase locally or using SRI hash for better security
 import { init as initializeAptabase, trackEvent as aptaEvent } from 'https://cdn.jsdelivr.net/npm/@aptabase/web@0.4.3/+esm';
 
 let IS_DEBUG_SESSION = false;
@@ -40,18 +41,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const version = manifest.Version || 'dev';
         let aptaKey = manifest.Aptabase || 'aptabase_api_key_placeholder';
 
-        // Allow override via query param for local testing: ?apta=KEY
-        const params = new URLSearchParams(window.location.search);
-        const paramKey = params.get('apta');
-        if (paramKey) {
-            aptaKey = paramKey.trim();
-            try { sessionStorage.setItem('apta_override', aptaKey); } catch {}
-        } else {
-            // If previously set in this session, reuse it
-            try {
-                const saved = sessionStorage.getItem('apta_override');
-                if (saved) aptaKey = saved;
-            } catch {}
+        // For local development, use environment-based detection
+        if (IS_DEBUG_SESSION && aptaKey === 'aptabase_api_key_placeholder') {
+            // In local development, analytics are disabled by default
+            // Use a proper local development setup instead of URL parameters
+            return;
         }
 
         if (aptaKey === 'aptabase_api_key_placeholder' || !aptaKey) {
