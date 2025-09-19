@@ -530,9 +530,18 @@ class CiscoDeviceApp {
     }
     
     modal.classList.remove('active');
-    modalVideo.pause();
-    modalVideo.src = '';
+    
+    // Properly stop and clean up video to prevent "Invalid URI" errors
+    if (modalVideo.src) {
+      modalVideo.pause();
+      modalVideo.removeAttribute('src');
+      modalVideo.load(); // This resets the video element
+    }
+    
+    // Clean up GIF
     modalGif.src = '';
+    
+    // Reset display states
     modalVideo.style.display = 'block';
     modalGif.style.display = 'none';
     document.body.style.overflow = '';
