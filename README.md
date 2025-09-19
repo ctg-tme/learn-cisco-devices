@@ -39,7 +39,7 @@ Examples:
 ## Features
 
 - Responsive video grid layout
-- Modal video player
+- Modal video player with accessibility support
 - Theme switching (Cisco brand vs classic)
 - QR code visibility control
 - Modular deployment structure

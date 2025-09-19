@@ -2,9 +2,10 @@
 class CiscoDeviceApp {
   constructor() {
     this.config = null;
-    this.currentPage = null;
     this.urlParams = new URLSearchParams(window.location.search);
     this.filters = this.parseFilters();
+    this.autoCloseTimer = null;
+    this.focusedElementBeforeModal = null;
     this.init();
   }
 
@@ -164,43 +165,51 @@ class CiscoDeviceApp {
   }
 
   renderHomepage(config) {
+    const app = document.getElementById('app');
+    
     // Hide QR code on homepage
     const qrCode = document.getElementById('qrCode');
     qrCode.style.display = 'none';
-
-    const app = document.getElementById('app');
+    
+    const deployments = config.deployments || [];
+    
     app.innerHTML = `
-      <div class="header">
-        <h1>${config.header.title}</h1>
-        <p>${config.header.subtitle}</p>
-      </div>
-
       <div class="container">
-        <div class="section">
-          <h2 class="section-title">Available Deployments</h2>
-          <div class="video-grid">
-            ${config.deployments.map(deployment => `
-              <div class="deployment-card" data-route="${deployment.id}">
-                <div class="deployment-thumbnail">
-                  <img src="${this.getAbsolutePath(deployment.thumbnail)}" alt="${deployment.name} ${deployment.subtitle}">
-                  <div class="deployment-overlay">
-                    <h3>${deployment.name}</h3>
-                    <p>${deployment.subtitle}</p>
-                  </div>
-                </div>
+        <header class="header">
+          <h1>${config.header.title}</h1>
+          <p class="subtitle">${config.header.subtitle}</p>
+        </header>
+        <section class="deployment-grid" role="list" aria-label="Available device tutorials">
+          ${deployments.map(deployment => `
+            <article class="deployment-card" data-route="${deployment.id}" role="listitem" tabindex="0" 
+                     aria-label="Open ${deployment.name} ${deployment.subtitle} tutorials">
+              <img src="${this.getAbsolutePath(deployment.thumbnail)}" alt="" class="deployment-thumbnail" role="presentation">
+              <div class="deployment-info">
+                <h3 class="deployment-name">${deployment.name}</h3>
+                <p class="deployment-subtitle">${deployment.subtitle}</p>
               </div>
-            `).join('')}
-          </div>
-        </div>
+            </article>
+          `).join('')}
+        </section>
       </div>
     `;
-
-    // Add click handlers for deployment cards
-    const deploymentCards = app.querySelectorAll('.deployment-card');
+    
+    // Add click and keyboard handlers for deployment cards
+    const deploymentCards = document.querySelectorAll('.deployment-card');
     deploymentCards.forEach(card => {
+      // Click handler
       card.addEventListener('click', () => {
         const route = card.getAttribute('data-route');
         this.navigateTo(route);
+      });
+      
+      // Keyboard handler
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const route = card.getAttribute('data-route');
+          this.navigateTo(route);
+        }
       });
     });
   }
@@ -278,10 +287,10 @@ class CiscoDeviceApp {
 
     // Render header
     const headerHtml = `
-      <div class="header">
+      <header class="header">
         <h1>${config.header.title}</h1>
-        <p>${config.header.subtitle}</p>
-      </div>
+        <p class="subtitle">${config.header.subtitle}</p>
+      </header>
     `;
 
     // Render sections with filtered videos
@@ -292,25 +301,29 @@ class CiscoDeviceApp {
       // Skip empty sections
       if (filteredVideos.length === 0) return '';
       
-      const videosHtml = filteredVideos.map(video => `
-        <div class="video-card" onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')">
+      const videosHtml = filteredVideos.map((video, index) => `
+        <article class="video-card" tabindex="0" role="button" 
+                 aria-label="Play tutorial: ${video.title}"
+                 data-video-src="${this.getAbsolutePath(video.video)}"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')}"
+                 onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')">
           <div class="video-thumbnail">
-            <img src="${this.getAbsolutePath(video.thumbnail)}" alt="${video.title}">
-            <div class="play-button"></div>
+            <img src="${this.getAbsolutePath(video.thumbnail)}" alt="" role="presentation">
+            <div class="play-button" aria-hidden="true"></div>
           </div>
           <div class="video-info">
             <h3 class="video-title">${video.title}</h3>
           </div>
-        </div>
+        </article>
       `).join('');
 
       return `
-        <div class="section">
+        <section class="section">
           <h2 class="section-title">${section.title}</h2>
-          <div class="video-grid">
+          <div class="video-grid" role="list" aria-label="${section.title} tutorials">
             ${videosHtml}
           </div>
-        </div>
+        </section>
       `;
     }).filter(sectionHtml => sectionHtml !== '').join('');
 
@@ -322,6 +335,9 @@ class CiscoDeviceApp {
         ${sectionsHtml}
       </div>
     `;
+    
+    // Announce page changes to screen readers
+    this.announcePageChange(config.title);
 
     // Add scroll indicator if content overflows
     this.addScrollIndicator();
@@ -366,6 +382,11 @@ class CiscoDeviceApp {
     const modal = document.getElementById('videoModal');
     const modalVideo = document.getElementById('modalVideo');
     const modalGif = document.getElementById('modalGif');
+    const modalTitle = document.getElementById('modal-title');
+    const videoDescription = document.getElementById('video-description');
+    
+    // Store the currently focused element to restore later
+    this.focusedElementBeforeModal = document.activeElement;
     
     // Clear any existing auto-close timers
     if (this.autoCloseTimer) {
@@ -441,8 +462,24 @@ class CiscoDeviceApp {
       });
     }
     
+    // Set up accessibility attributes and content
+    const videoTitle = this.getVideoTitle(mediaSrc);
+    modalTitle.textContent = videoTitle;
+    videoDescription.textContent = `Tutorial video: ${videoTitle}. Use video controls to play, pause, or adjust volume. Press Escape or click Back to close.`;
+    
     modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    
+    // Focus management - focus the close button for keyboard users
+    const closeButton = document.getElementById('closeModal');
+    setTimeout(() => closeButton.focus(), 100);
+    
+    // Announce video opening to screen readers
+    this.announceToScreenReader(`Video opened: ${videoTitle}. Use video controls or press Escape to close.`);
+    
+    // Trap focus within modal
+    this.trapFocus(modal);
 
     // Close modal when clicking on background or pressing Escape
     const handleModalClick = (e) => {
@@ -537,6 +574,13 @@ class CiscoDeviceApp {
     }
     
     modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    
+    // Restore focus to the element that was focused before opening modal
+    if (this.focusedElementBeforeModal) {
+      this.focusedElementBeforeModal.focus();
+      this.focusedElementBeforeModal = null;
+    }
     
     // Properly stop and clean up video to prevent "Invalid URI" errors
     if (modalVideo.src) {
@@ -618,6 +662,53 @@ class CiscoDeviceApp {
     }
     
     this.handleRoute();
+  }
+
+  trapFocus(modal) {
+    const focusableElements = modal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstFocusableElement = focusableElements[0];
+    const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
+    modal.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusableElement) {
+            lastFocusableElement.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastFocusableElement) {
+            firstFocusableElement.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    });
+  }
+
+  announcePageChange(pageTitle) {
+    // Announce page changes to screen readers
+    const announcements = document.getElementById('sr-announcements');
+    if (announcements) {
+      announcements.textContent = `Page loaded: ${pageTitle}`;
+      // Clear after announcement
+      setTimeout(() => {
+        announcements.textContent = '';
+      }, 1000);
+    }
+  }
+
+  announceToScreenReader(message) {
+    // General purpose screen reader announcement
+    const announcements = document.getElementById('sr-announcements');
+    if (announcements) {
+      announcements.textContent = message;
+      setTimeout(() => {
+        announcements.textContent = '';
+      }, 3000);
+    }
   }
 
   getVideoTitle(mediaSrc) {

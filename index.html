@@ -4,28 +4,43 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Learn Cisco Devices</title>
+  <meta name="description" content="Interactive video tutorials for learning how to use Cisco collaboration devices in meeting rooms">
   <link rel="icon" type="image/png" href="/learn-cisco-devices/shared/assets/images/favicon.png">
   <link rel="stylesheet" href="/learn-cisco-devices/shared/styles/main.css">
 </head>
 
 <body>
+  <!-- Skip Navigation Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <!-- QR Code (dynamically shown/hidden) -->
-  <div class="qr-code" id="qrCode" style="display: none;">
-    <img id="qrImage" src="" alt="QR Code">
+  <aside class="qr-code" id="qrCode" style="display: none;" aria-label="Mobile access">
+    <img id="qrImage" src="" alt="QR Code to access this page on your mobile device">
     <p class="qr-text">View on your phone</p>
-  </div>
+  </aside>
 
   <!-- Video Modal -->
-  <div class="modal" id="videoModal">
+  <div class="modal" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
     <div class="modal-content">
-      <button class="close-button" id="closeModal">Back</button>
-      <video id="modalVideo" controls></video>
-      <img id="modalGif" style="display: none; max-width: 100%; height: auto;" alt="GIF Animation">
+      <header class="modal-header">
+        <h2 id="modal-title" class="visually-hidden">Video Tutorial</h2>
+        <button class="close-button" id="closeModal" aria-label="Close video and return to tutorials">Back</button>
+      </header>
+      <main class="modal-body">
+        <video id="modalVideo" controls aria-describedby="video-description"></video>
+        <img id="modalGif" style="display: none; max-width: 100%; height: auto;" alt="Tutorial animation" role="img">
+        <div id="video-description" class="visually-hidden"></div>
+      </main>
     </div>
   </div>
 
+  <!-- Screen Reader Announcements -->
+  <div id="sr-announcements" aria-live="polite" aria-atomic="true" class="visually-hidden"></div>
+
   <!-- Main Content Container -->
-  <div id="app"></div>
+  <main id="main-content" role="main">
+    <div id="app"></div>
+  </main>
 
   <script src="/learn-cisco-devices/shared/scripts/aptabase.js" type="module"></script>
   <script src="/learn-cisco-devices/shared/scripts/config.js"></script>
