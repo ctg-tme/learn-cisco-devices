@@ -302,7 +302,7 @@ class CiscoDeviceApp {
       if (filteredVideos.length === 0) return '';
       
       const videosHtml = filteredVideos.map((video, index) => `
-        <article class="video-card" role="listitem">
+        <li class="video-card">
           <button class="video-button" 
                   aria-label="Play tutorial: ${video.title}"
                   data-video-src="${this.getAbsolutePath(video.video)}"
@@ -315,15 +315,15 @@ class CiscoDeviceApp {
               <h3 class="video-title">${video.title}</h3>
             </div>
           </button>
-        </article>
+        </li>
       `).join('');
 
       return `
         <section class="section">
           <h2 class="section-title">${section.title}</h2>
-          <div class="video-grid" role="list" aria-label="${section.title} tutorials">
+          <ul class="video-grid" aria-label="${section.title} tutorials">
             ${videosHtml}
-          </div>
+          </ul>
         </section>
       `;
     }).filter(sectionHtml => sectionHtml !== '').join('');
