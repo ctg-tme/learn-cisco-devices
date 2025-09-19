@@ -368,15 +368,6 @@ class CiscoDeviceApp {
     const modalVideo = document.getElementById('modalVideo');
     const modalGif = document.getElementById('modalGif');
     
-    // Track modal opening event
-    if (window.aptabaseEvent) {
-      window.aptabaseEvent('modal_opened', {
-        'modal_name': 'videoModal',
-        'media_src': mediaSrc,
-        'current_route': window.location.pathname
-      });
-    }
-    
     // Clear any existing auto-close timers
     if (this.autoCloseTimer) {
       clearTimeout(this.autoCloseTimer);
@@ -399,6 +390,16 @@ class CiscoDeviceApp {
       
       // Set up video end detection and auto-close for Cisco devices
       const handleVideoEnd = () => {
+        // Track video completion
+        if (window.aptabaseEvent) {
+          window.aptabaseEvent('video_completed', {
+            'video_src': mediaSrc,
+            'video_title': this.getVideoTitle(mediaSrc),
+            'current_route': window.location.pathname,
+            'duration': modalVideo.duration || 0
+          });
+        }
+        
         if (this.shouldAutoClose()) {
           this.startAutoCloseTimer();
         }
@@ -410,22 +411,24 @@ class CiscoDeviceApp {
       
       // Auto-play the video
       modalVideo.play().then(() => {
-        // Track video play event
+        // Track video play event (most important analytics event)
         if (window.aptabaseEvent) {
           window.aptabaseEvent('video_played', {
             'video_src': mediaSrc,
-            'auto_play': true,
-            'current_route': window.location.pathname
+            'video_title': this.getVideoTitle(mediaSrc),
+            'current_route': window.location.pathname,
+            'auto_play': true
           });
         }
       }).catch(e => {
         console.log('Autoplay prevented by browser:', e);
-        // Track autoplay failure
+        // Track autoplay failure - important for understanding user experience
         if (window.aptabaseEvent) {
           window.aptabaseEvent('video_autoplay_failed', {
             'video_src': mediaSrc,
-            'error': e.message,
-            'current_route': window.location.pathname
+            'video_title': this.getVideoTitle(mediaSrc),
+            'current_route': window.location.pathname,
+            'error': e.message
           });
         }
       });
@@ -520,14 +523,6 @@ class CiscoDeviceApp {
     const modalVideo = document.getElementById('modalVideo');
     const modalGif = document.getElementById('modalGif');
     
-    // Track modal closing event
-    if (window.aptabaseEvent) {
-      window.aptabaseEvent('modal_closed', {
-        'modal_name': 'videoModal',
-        'current_route': window.location.pathname
-      });
-    }
-    
     // Clear auto-close timer
     if (this.autoCloseTimer) {
       clearTimeout(this.autoCloseTimer);
@@ -585,6 +580,14 @@ class CiscoDeviceApp {
     }
     
     this.handleRoute();
+  }
+
+  getVideoTitle(mediaSrc) {
+    // Extract a readable title from the video file path
+    const filename = mediaSrc.split('/').pop(); // Get filename
+    const nameWithoutExt = filename.split('.')[0]; // Remove extension
+    // Convert underscores to spaces and title case
+    return nameWithoutExt.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   }
 
   addScrollIndicator() {
