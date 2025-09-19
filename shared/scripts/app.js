@@ -167,9 +167,39 @@ class CiscoDeviceApp {
   renderHomepage(config) {
     const app = document.getElementById('app');
     
-    // Hide QR code on homepage
+    // Handle QR code display (same logic as deployment pages)
     const qrCode = document.getElementById('qrCode');
-    qrCode.style.display = 'none';
+    const qrImage = document.getElementById('qrImage');
+    
+    // Determine if QR code should be shown
+    const qrParam = this.urlParams.get('qr');
+    const isCiscoNavigator = navigator.userAgent.includes('Cisco Room Navigator');
+    const isRoomOS = navigator.userAgent.includes('RoomOS');
+    
+    let showQRCode = false;
+    
+    // URL parameter takes precedence
+    if (qrParam === 'true') {
+      showQRCode = true;
+    } else if (qrParam === 'false') {
+      showQRCode = false;
+    } else {
+      // No URL parameter set, use user agent detection
+      showQRCode = isCiscoNavigator || isRoomOS;
+    }
+    
+    if (showQRCode) {
+      // Generate dynamic QR code based on current URL with qr=false parameter
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('qr', 'false');
+      const urlWithQrFalse = encodeURIComponent(currentUrl.toString());
+      const qrSize = '200x200'; // Default size, can be made configurable
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?data=${urlWithQrFalse}&size=${qrSize}`;
+      qrImage.alt = 'QR Code for current page';
+      qrCode.style.display = 'block';
+    } else {
+      qrCode.style.display = 'none';
+    }
     
     const deployments = config.deployments || [];
     
