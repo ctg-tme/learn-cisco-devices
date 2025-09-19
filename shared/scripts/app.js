@@ -390,13 +390,19 @@ class CiscoDeviceApp {
       
       // Set up video end detection and auto-close for Cisco devices
       const handleVideoEnd = () => {
+        // For completed videos, use the video duration as viewing time
+        // This prevents inflated metrics if user leaves video open and walks away
+        const videoDuration = modalVideo.duration || 0;
+        
         // Track video completion
         if (window.aptabaseEvent) {
           window.aptabaseEvent('video_completed', {
             'video_src': mediaSrc,
             'video_title': this.getVideoTitle(mediaSrc),
             'current_route': window.location.pathname,
-            'duration': modalVideo.duration || 0
+            'duration': videoDuration,
+            'viewing_time': Math.round(videoDuration * 100) / 100, // Use video duration, not wall-clock time
+            'completion_percentage': 100
           });
         }
         
@@ -411,6 +417,9 @@ class CiscoDeviceApp {
       
       // Auto-play the video
       modalVideo.play().then(() => {
+        // Track video start time for viewing duration calculation
+        modalVideo.startTime = Date.now();
+        
         // Track video play event (most important analytics event)
         if (window.aptabaseEvent) {
           window.aptabaseEvent('video_played', {
@@ -533,9 +542,31 @@ class CiscoDeviceApp {
     
     // Properly stop and clean up video to prevent "Invalid URI" errors
     if (modalVideo.src) {
+      // Track viewing time for incomplete videos
+      if (modalVideo.startTime && window.aptabaseEvent) {
+        const viewingTime = (Date.now() - modalVideo.startTime) / 1000;
+        const currentTime = modalVideo.currentTime || 0;
+        const duration = modalVideo.duration || 0;
+        
+        // Only track if user actually watched some of the video (more than 1 second)
+        if (viewingTime > 1) {
+          window.aptabaseEvent('video_viewing_time', {
+            'video_src': modalVideo.src,
+            'video_title': this.getVideoTitle(modalVideo.src),
+            'current_route': window.location.pathname,
+            'viewing_time': Math.round(viewingTime * 100) / 100,
+            'video_position': Math.round(currentTime * 100) / 100,
+            'video_duration': Math.round(duration * 100) / 100,
+            'completion_percentage': duration > 0 ? Math.round((currentTime / duration) * 100) : 0,
+            'completed': false
+          });
+        }
+      }
+      
       modalVideo.pause();
       modalVideo.removeAttribute('src');
       modalVideo.load(); // This resets the video element
+      modalVideo.startTime = null; // Clear the start time
     }
     
     // Clean up GIF
