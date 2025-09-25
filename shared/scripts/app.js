@@ -40,7 +40,8 @@ class CiscoDeviceApp {
       if (routeParam) {
         // Clean up the URL and navigate to the proper route
         const repoName = window.SPA_CONFIG.REPO_NAME;
-        const cleanUrl = new URL(window.location.origin + repoName + routeParam);
+        const decodedRoute = decodeURIComponent(routeParam);
+        const cleanUrl = new URL(window.location.origin + repoName + decodedRoute);
         this.urlParams.delete('route');
         this.urlParams.forEach((value, key) => {
           cleanUrl.searchParams.set(key, value);
