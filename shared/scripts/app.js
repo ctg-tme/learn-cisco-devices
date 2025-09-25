@@ -216,7 +216,7 @@ class CiscoDeviceApp {
           ${deployments.map(deployment => `
             <li class="deployment-card" data-route="${deployment.id}" tabindex="0" 
                 aria-label="Open ${deployment.name} ${deployment.subtitle} tutorials">
-              <img src="${this.getAbsolutePath(deployment.thumbnail)}" alt="" class="deployment-thumbnail" role="presentation">
+              <img data-src="${this.getAbsolutePath(deployment.thumbnail)}" alt="" class="deployment-thumbnail lazy-load" role="presentation">
               <div class="deployment-info">
                 <h2 class="deployment-name">${deployment.name}</h2>
                 <p class="deployment-subtitle">${deployment.subtitle}</p>
@@ -245,6 +245,9 @@ class CiscoDeviceApp {
         }
       });
     });
+    
+    // Initialize lazy loading for images
+    this.initLazyLoading();
   }
 
   filterVideo(video) {
@@ -341,7 +344,7 @@ class CiscoDeviceApp {
                   data-video-src="${this.getAbsolutePath(video.video)}"
                   onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')">
             <div class="video-thumbnail">
-              <img src="${this.getAbsolutePath(video.thumbnail)}" alt="" role="presentation">
+              <img data-src="${this.getAbsolutePath(video.thumbnail)}" alt="" class="lazy-load" role="presentation">
               <div class="play-button" aria-hidden="true"></div>
             </div>
             <div class="video-info">
@@ -376,6 +379,9 @@ class CiscoDeviceApp {
     // Add scroll indicator if content overflows
     this.addScrollIndicator();
     this.setupEventListeners();
+    
+    // Initialize lazy loading for images
+    this.initLazyLoading();
   }
 
   setupVideoModal() {
@@ -729,15 +735,7 @@ class CiscoDeviceApp {
   }
 
   announcePageChange(pageTitle) {
-    // Announce page changes to screen readers
-    const announcements = document.getElementById('sr-announcements');
-    if (announcements) {
-      announcements.textContent = `Page loaded: ${pageTitle}`;
-      // Clear after announcement
-      setTimeout(() => {
-        announcements.textContent = '';
-      }, 1000);
-    }
+    this.announceToScreenReader(`Navigated to ${pageTitle}. Page content updated.`);
   }
 
   announceToScreenReader(message) {
@@ -849,6 +847,69 @@ class CiscoDeviceApp {
         </div>
       </div>
     `;
+  }
+
+  initLazyLoading() {
+    // Check if Intersection Observer is supported
+    if (!('IntersectionObserver' in window)) {
+      // Fallback: load all images immediately
+      this.loadAllImages();
+      return;
+    }
+
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const src = img.getAttribute('data-src');
+          
+          if (src) {
+            // Create a new image to preload
+            const newImg = new Image();
+            newImg.onload = () => {
+              // Once loaded, set the src and remove data-src
+              img.src = src;
+              img.removeAttribute('data-src');
+              img.classList.remove('lazy-load');
+              img.classList.add('lazy-loaded');
+            };
+            newImg.onerror = () => {
+              // Handle error - show placeholder or remove lazy-load class
+              img.classList.remove('lazy-load');
+              img.classList.add('lazy-error');
+            };
+            newImg.src = src;
+          }
+          
+          // Stop observing this image
+          observer.unobserve(img);
+        }
+      });
+    }, {
+      // Load images when they're 100px away from viewport
+      rootMargin: '100px 0px',
+      threshold: 0.01
+    });
+
+    // Observe all lazy-load images
+    const lazyImages = document.querySelectorAll('img.lazy-load');
+    lazyImages.forEach(img => {
+      imageObserver.observe(img);
+    });
+  }
+
+  loadAllImages() {
+    // Fallback for browsers without Intersection Observer
+    const lazyImages = document.querySelectorAll('img.lazy-load');
+    lazyImages.forEach(img => {
+      const src = img.getAttribute('data-src');
+      if (src) {
+        img.src = src;
+        img.removeAttribute('data-src');
+        img.classList.remove('lazy-load');
+        img.classList.add('lazy-loaded');
+      }
+    });
   }
 }
 
