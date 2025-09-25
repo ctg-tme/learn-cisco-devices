@@ -422,6 +422,32 @@ async function handlePanelClick({ Origin, PanelId, PeripheralId }) {
   }
 }
 
+function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)) }
+
+async function uptimeHandler(delayInMinutes = 2) {
+  const targetUptimeMs = delayInMinutes * 1000 * 60;
+  let currentUptime = (await xapi.Status.SystemUnit.Uptime.get() * 1000)
+
+  console.log(`Checking system uptime...`);
+  if (currentUptime < targetUptimeMs){
+    console.log(`Waiting for system uptime to reach a minimum uptime of ${delayInMinutes} minutes...`)
+  }
+  
+  while (currentUptime < targetUptimeMs) {
+    try {
+      currentUptime = (await xapi.Status.SystemUnit.Uptime.get() * 1000)
+    } catch (error) {
+      console.error("Error getting system uptime:", error);
+    }
+
+    if (currentUptime < targetUptimeMs) {
+      await delay(1000); // Wait 1 second before checking again
+    }
+  }
+
+  console.log(`System uptime of ${delayInMinutes} minutes reached!`);
+}
+
 /**
  * @typedef {object} AlertMessage
  * @property {string} Title The title of the alert message.
@@ -457,6 +483,8 @@ async function handlePanelClick({ Origin, PanelId, PeripheralId }) {
 async function init() {
   console.log(`Initializing Macro...`)
   await xapi.Command.UserInterface.Message.Alert.Clear();
+
+  await uptimeHandler()
 
   const checkRoomOS = await Validate_RoomOS_Version(minimumRoomOSversion);
 
@@ -511,15 +539,15 @@ async function init() {
   }
 
   try {
-    const check4mtr = await xapi.Status.MicrosoftTeams.Software.get()
+      const check4mtr = await xapi.Status.MicrosoftTeams.Software.get()
 
-    if (check4mtr?.Version?.Android) {
-      console.debug('MTR System Detected')
-      osPlatform = 'mtr';
+      if (check4mtr?.Version?.Android) {
+        console.debug('MTR System Detected')
+        osPlatform = 'mtr';
+      }
+    } catch (e) {
+      console.debug({ Context: 'MTR Not detected, this error is ok to ignore', Error: e.message });
     }
-  } catch (e) {
-    console.debug({ Context: 'MTR Not detected, this error is ok to ignore', Error: e.message });
-  }
 
   if (developer.Mode && developer.PlatformOverride.Mode) {
     switch (developer.PlatformOverride.Platform.toLowerCase()) {
