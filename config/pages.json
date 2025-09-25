@@ -9,18 +9,18 @@
     "deployments": [
       {
         "id": "mtr-navigator",
-        "name": "Microsoft Teams Rooms",
+        "name": "Cisco Devices Microsoft Teams Rooms",
         "subtitle": "with Cisco Navigator",
         "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png"
       }
     ]
   },
   "mtr-navigator": {
-    "title": "Learn Cisco Devices - Microsoft Teams Rooms with Navigator",
+    "title": "Learn Cisco Devices - Microsoft Teams Rooms with Cisco Navigator",
     "type": "deployment",
     "header": {
       "title": "Learn how to use your Cisco device",
-      "subtitle": "Video tutorials for Microsoft Teams Rooms with Navigator"
+      "subtitle": "Video tutorials for Microsoft Teams Rooms with Cisco Navigator"
     },
     "sections": [
       {
