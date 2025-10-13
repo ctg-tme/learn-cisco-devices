@@ -207,11 +207,11 @@ class CiscoDeviceApp {
     const deployments = config.deployments || [];
     
     app.innerHTML = `
+      <header class="header">
+        <h1>${config.header.title}</h1>
+        <p class="subtitle">${config.header.subtitle}</p>
+      </header>
       <div class="container">
-        <header class="header">
-          <h1>${config.header.title}</h1>
-          <p class="subtitle">${config.header.subtitle}</p>
-        </header>
         <ul class="deployment-grid" aria-label="Available device tutorials">
           ${deployments.map(deployment => `
             <li class="deployment-card" data-route="${deployment.id}" tabindex="0" 
