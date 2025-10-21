@@ -16,11 +16,11 @@
     ]
   },
   "mtr-navigator": {
-    "title": "Learn Cisco Devices - Microsoft Teams Rooms with Cisco Navigator",
+    "title": "Learn Cisco Devices - Microsoft Teams Rooms with Cisco Navigator touch controller",
     "type": "deployment",
     "header": {
       "title": "Learn how to use your Cisco device",
-      "subtitle": "Video tutorials for Microsoft Teams Rooms with Cisco Navigator"
+      "subtitle": "Video tutorials for Microsoft Teams Rooms with Cisco Navigator touch controller"
     },
     "sections": [
       {
@@ -34,7 +34,7 @@
             "tags": ["calendar"]
           },
           {
-            "title": "Meet now with Cisco Navigator",
+            "title": "Meet now with Cisco Navigator touch controller",
             "thumbnail": "mtr-navigator/images/mtr_navigator_meet_now.png",
             "video": "mtr-navigator/videos/mtr_navigator_meet_now.webm",
             "tags": ["navigator"]
