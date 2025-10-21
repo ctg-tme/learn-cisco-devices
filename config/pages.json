@@ -31,13 +31,13 @@
             "title": "Schedule a meeting with Microsoft Teams Calendar",
             "thumbnail": "mtr-navigator/images/mtr_navigator_schedule_teams.png",
             "video": "mtr-navigator/videos/mtr_navigator_schedule_teams.webm",
-            "tags": ["teams", "calendar"]
+            "tags": ["calendar"]
           },
           {
             "title": "Meet now with Cisco Navigator",
             "thumbnail": "mtr-navigator/images/mtr_navigator_meet_now.png",
             "video": "mtr-navigator/videos/mtr_navigator_meet_now.webm",
-            "tags": ["navigator", "cisco"]
+            "tags": ["navigator"]
           }
         ]
       },
@@ -49,13 +49,13 @@
             "title": "Join a scheduled meeting",
             "thumbnail": "mtr-navigator/images/mtr_navigator_join_scheduled_meeting.png",
             "video": "mtr-navigator/videos/mtr_navigator_join_scheduled_meeting.webm",
-            "tags": ["device", "teams"]
+            "tags": ["obtp"]
           },
           {
             "title": "Join a meeting with QR code",
             "thumbnail": "mtr-navigator/images/mtr_navigator_join_qr.png",
             "video": "mtr-navigator/videos/mtr_navigator_join_qr.webm",
-            "tags": ["qr", "mobile"]
+            "tags": ["qr"]
           },
           {
             "title": "Join a Webex/Zoom meeting with meeting ID",
@@ -67,7 +67,7 @@
             "title": "Join with room audio",
             "thumbnail": "mtr-navigator/images/mtr_navigator_join_room_audio.png",
             "video": "mtr-navigator/videos/mtr_navigator_join_room_audio.webm",
-            "tags": ["audio", "room"]
+            "tags": ["audio"]
           }
         ]
       },
@@ -79,13 +79,13 @@
             "title": "Share content using a wired connection",
             "thumbnail": "mtr-navigator/images/mtr_navigator_share_wired_connection.png",
             "video": "mtr-navigator/videos/mtr_navigator_share_wired_connection.webm",
-            "tags": ["teams", "share"]
+            "tags": ["wired"]
           },
           {
             "title": "Share with PowerPoint Live",
             "thumbnail": "mtr-navigator/images/mtr_navigator_share_powerpoint.png",
             "video": "mtr-navigator/videos/mtr_navigator_share_powerpoint.webm",
-            "tags": ["powerpoint", "office"]
+            "tags": ["powerpoint"]
           },
           {
             "title": "Share with Miracast",
