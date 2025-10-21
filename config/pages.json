@@ -64,7 +64,7 @@
             "tags": ["third-party", "webex", "zoom"]
           },
           {
-            "title": "Join with room audio",
+            "title": "Use Microsoft Teams to add your device to the meeting",
             "thumbnail": "mtr-navigator/images/mtr_navigator_join_room_audio.png",
             "video": "mtr-navigator/videos/mtr_navigator_join_room_audio.webm",
             "tags": ["audio"]
