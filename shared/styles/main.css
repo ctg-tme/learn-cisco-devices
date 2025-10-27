@@ -320,6 +320,10 @@ body.dark-theme .video-card:hover .play-button {
   color: #2c2c2c;
 }
 
+body.dark-theme .video-card:hover .play-button::after {
+  border-left-color: #000000;
+}
+
 body.dark-theme .close-button {
   background: rgba(255, 255, 255, 0.8);
   color: #2c2c2c;
