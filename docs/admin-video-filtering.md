@@ -56,8 +56,45 @@ https://ctg-tme.github.io/learn-cisco-devices/mtr-navigator?hide=powerpoint,mira
 - `wirelessShare` - General wireless sharing videos
 - `qr` - QR code joining videos
 
+## Version Filtering
+
+### Show Specific Software Version
+To show videos for a specific RoomOS version:
+```
+?version=RoomOS 11
+```
+
+**Example:**
+```
+https://ctg-tme.github.io/learn-cisco-devices/mtr-navigator?version=RoomOS 11
+```
+
+### Show All Versions
+To show videos from all software versions at once:
+```
+?version=all
+```
+
+**Example:**
+```
+https://ctg-tme.github.io/learn-cisco-devices/mtr-navigator?version=all
+```
+
+### Default Behavior
+Without any version parameter, the site shows only videos marked as default (typically the latest recommended version):
+```
+https://ctg-tme.github.io/learn-cisco-devices/mtr-navigator
+```
+
+### Combining Version and Tag Filters
+You can combine version filtering with tag-based hiding:
+```
+https://ctg-tme.github.io/learn-cisco-devices/mtr-navigator?version=RoomOS 11&hide=powerpoint
+```
+
 ## Testing
 After adding the URL parameters, verify that:
 1. The targeted videos no longer appear in the "Share Content" section
 2. If all videos in a section are hidden, the entire section disappears
 3. Other sections remain unaffected
+4. Version filtering shows only videos matching the specified version

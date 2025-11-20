@@ -1,0 +1,14 @@
+{
+  "name": "learn-cisco-devices",
+  "version": "1.0.0",
+  "description": "Interactive video tutorials for Cisco collaboration devices",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "thumbnails": "node generate-thumbnails.js",
+    "thumbnails:force": "node generate-thumbnails.js --force"
+  },
+  "keywords": ["cisco", "collaboration", "tutorials"],
+  "author": "",
+  "license": "ISC"
+}

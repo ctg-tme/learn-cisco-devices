@@ -4,6 +4,7 @@ class CiscoDeviceApp {
     this.config = null;
     this.urlParams = new URLSearchParams(window.location.search);
     this.filters = this.parseFilters();
+    this.versionFilter = this.parseVersionFilter();
     this.autoCloseTimer = null;
     this.focusedElementBeforeModal = null;
     this.init();
@@ -28,6 +29,15 @@ class CiscoDeviceApp {
     }
     
     return filters;
+  }
+
+  parseVersionFilter() {
+    // Parse version parameter
+    // If not specified, return null to show default videos (those with default: true)
+    // If set to "all", show all versions
+    // Otherwise, show videos matching the specific version (e.g., "RoomOS11", "RoomOS26")
+    const versionParam = this.urlParams.get('version');
+    return versionParam || null;
   }
 
   async init() {
@@ -251,6 +261,22 @@ class CiscoDeviceApp {
   }
 
   filterVideo(video) {
+    // First check version filter
+    if (this.versionFilter === 'all') {
+      // Show all videos regardless of version
+    } else if (this.versionFilter) {
+      // Specific version requested (e.g., "RoomOS11", "RoomOS26")
+      if (video.version !== this.versionFilter) {
+        return false;
+      }
+    } else {
+      // No version filter specified - show only default videos
+      if (!video.default) {
+        return false;
+      }
+    }
+    
+    // Then check tag filters
     if (!video.tags) return true; // Show videos without tags by default
     
     const { hide, show } = this.filters;
@@ -337,7 +363,9 @@ class CiscoDeviceApp {
       // Skip empty sections
       if (filteredVideos.length === 0) return '';
       
-      const videosHtml = filteredVideos.map((video, index) => `
+      const videosHtml = filteredVideos.map((video, index) => {
+        const versionBadge = this.getVersionBadgeHtml(video.version);
+        return `
         <li class="video-card">
           <button class="video-button" 
                   aria-label="Play tutorial: ${video.title}"
@@ -345,6 +373,7 @@ class CiscoDeviceApp {
                   onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')">
             <div class="video-thumbnail">
               <img data-src="${this.getAbsolutePath(video.thumbnail)}" alt="" class="lazy-load" role="presentation">
+              ${versionBadge}
               <div class="play-button" aria-hidden="true"></div>
             </div>
             <div class="video-info">
@@ -352,7 +381,7 @@ class CiscoDeviceApp {
             </div>
           </button>
         </li>
-      `).join('');
+      `}).join('');
 
       return `
         <section class="section">
@@ -767,6 +796,31 @@ class CiscoDeviceApp {
     // Convert underscores to spaces and title case, limit length
     const title = nameWithoutExt.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     return title.length > 100 ? title.substring(0, 100) + '...' : title;
+  }
+
+  getVersionBadgeHtml(version) {
+    // Generate HTML for version badge on video thumbnail
+    if (!version) return '';
+    
+    // Normalize version string for CSS class (e.g., "RoomOS11" -> "roomos11")
+    const versionClass = version.toLowerCase().replace(/\s+/g, '');
+    
+    return `<span class="version-badge ${versionClass}" aria-label="Software version: ${version}">${version}</span>`;
+  }
+
+  getVersionIndicatorHtml() {
+    // Generate HTML for version filter indicator in header
+    let message = '';
+    
+    if (this.versionFilter === 'all') {
+      message = 'Showing videos from <strong>all versions</strong>';
+    } else if (this.versionFilter) {
+      message = `Showing <strong>${this.versionFilter}</strong> videos`;
+    } else {
+      message = 'Showing <strong>default</strong> videos (latest recommended version)';
+    }
+    
+    return `<div class="version-filter-indicator" role="status" aria-live="polite">${message}</div>`;
   }
 
   addScrollIndicator() {

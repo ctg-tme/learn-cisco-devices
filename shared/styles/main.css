@@ -463,6 +463,22 @@ body.dark-theme .modal {
   transform: translate(-50%, -50%) scale(1.1);
 }
 
+/* Version Badge on Video Thumbnail */
+.version-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
 .video-info {
   padding: 1rem;
 }
