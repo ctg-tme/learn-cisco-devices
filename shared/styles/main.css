@@ -95,9 +95,9 @@
   padding: 0;
   margin: 0;
   width: 100%;
-  height: 100%;
   cursor: pointer;
-  display: block;
+  display: flex;
+  flex-direction: column;
   text-align: left;
   color: inherit;
   font-family: inherit;
@@ -409,6 +409,9 @@ body.dark-theme .modal {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   border: 1px solid #26384f;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .video-card:hover {
