@@ -364,7 +364,7 @@ class CiscoDeviceApp {
       if (filteredVideos.length === 0) return '';
       
       const videosHtml = filteredVideos.map((video, index) => {
-        const versionBadge = this.getVersionBadgeHtml(video.version);
+        const versionBadge = this.getVersionBadgeHtml(video);
         return `
         <li class="video-card">
           <button class="video-button" 
@@ -798,14 +798,17 @@ class CiscoDeviceApp {
     return title.length > 100 ? title.substring(0, 100) + '...' : title;
   }
 
-  getVersionBadgeHtml(version) {
+  getVersionBadgeHtml(video) {
     // Generate HTML for version badge on video thumbnail
-    if (!version) return '';
+    if (!video || !video.version) return '';
+    
+    // Show "Latest" for default videos, otherwise show version number
+    const displayText = video.default ? 'Latest' : video.version;
     
     // Normalize version string for CSS class (e.g., "RoomOS11" -> "roomos11")
-    const versionClass = version.toLowerCase().replace(/\s+/g, '');
+    const versionClass = video.version.toLowerCase().replace(/\s+/g, '');
     
-    return `<span class="version-badge ${versionClass}" aria-label="Software version: ${version}">${version}</span>`;
+    return `<span class="version-badge ${versionClass}" aria-label="Software version: ${video.version}">${displayText}</span>`;
   }
 
   getVersionIndicatorHtml() {
