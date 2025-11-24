@@ -61,11 +61,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.aptabaseReady = true;
 
         // Track initial page load
-        window.aptabaseEvent('page_loaded', {
+        const pageLoadProps = {
             page: window.location.pathname,
             hostname: window.location.hostname,
             user_agent: navigator.userAgent
-        });
+        };
+        
+        // Detect if this is a media proxy route and add extra properties
+        const pathname = window.location.pathname;
+        const cleanPath = pathname.startsWith(basePath) ? pathname.substring(basePath.length) : pathname;
+        const mediaMatch = cleanPath.match(/^\/media\/([^\/]+)\/(images|videos)\/(.+)$/);
+        
+        if (mediaMatch) {
+            const [, deployment, mediaType, filename] = mediaMatch;
+            const urlParams = new URLSearchParams(window.location.search);
+            pageLoadProps.media_proxy = true;
+            pageLoadProps.deployment = deployment;
+            pageLoadProps.media_type = mediaType;
+            pageLoadProps.filename = filename;
+            pageLoadProps.source = urlParams.get('source') || 'direct';
+            pageLoadProps.referrer = document.referrer || 'none';
+        }
+        
+        window.aptabaseEvent('page_loaded', pageLoadProps);
 
     } catch (error) {
         console.error('Failed to initialize Aptabase:', error);

@@ -139,25 +139,9 @@ class CiscoDeviceApp {
     const actualPath = `deployments/${deployment}/${mediaType}/${filename}`;
     const fullUrl = this.getAbsolutePath(actualPath);
     
-    // Extract source parameter for tracking where the link came from
-    const sourceParam = this.urlParams.get('source') || 'direct';
-    const referrer = document.referrer || 'none';
-    
-    // Track media access via proxy
-    if (window.aptabaseEvent) {
-      window.aptabaseEvent('media_proxy_access', {
-        'deployment': deployment,
-        'media_type': mediaType,
-        'filename': filename,
-        'source': sourceParam,
-        'referrer': referrer,
-        'full_path': actualPath
-      });
-    }
-    
     // Redirect to the actual file for both images and videos
     // This allows the media to be used in <img> tags and <video> tags
-    // while still tracking analytics
+    // Analytics are tracked via the augmented page_loaded event in aptabase.js
     window.location.replace(fullUrl);
     
     return true; // Handled as media proxy route
