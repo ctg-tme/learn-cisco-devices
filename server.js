@@ -44,9 +44,11 @@ const server = http.createServer((req, res) => {
   // Check if file exists
   if (!fs.existsSync(filePath)) {
     // For SPA routing, serve index.html for non-existent routes
-    // unless it's a request for a specific file type
+    // Special case: /media/ routes are SPA routes for analytics tracking
     const ext = path.extname(urlPath);
-    if (!ext || ext === '.html') {
+    const isMediaProxyRoute = urlPath.startsWith('/media/');
+    
+    if (!ext || ext === '.html' || isMediaProxyRoute) {
       filePath = path.join(ROOT_DIR, 'index.html');
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain' });

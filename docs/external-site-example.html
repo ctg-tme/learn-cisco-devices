@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>External Site - Trackable Media Links Example</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            line-height: 1.6;
+        }
+        .example {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .link-card {
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            background: #0d6efd;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: background 0.2s;
+        }
+        .link-card:hover {
+            background: #0b5ed7;
+        }
+        code {
+            background: #e9ecef;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <h1>External Site Integration Example</h1>
+    <p>This page demonstrates how external websites should link to Learn Cisco Devices media files to enable analytics tracking.</p>
+
+    <div class="example">
+        <h2>✅ Correct: Trackable Image Link</h2>
+        <p>Link to the media proxy URL so clicks are tracked:</p>
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png?source=example-site" 
+           class="link-card">
+            View Tutorial: Schedule Teams Meeting
+        </a>
+        <pre><code>&lt;a href="https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png?source=example-site"&gt;
+  View Tutorial: Schedule Teams Meeting
+&lt;/a&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <h2>✅ Correct: Trackable Video Link</h2>
+        <p>Link to the media proxy URL for videos:</p>
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/videos/mtr_navigator_schedule_teams.webm?source=example-site" 
+           class="link-card">
+            Watch Tutorial Video
+        </a>
+        <pre><code>&lt;a href="https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/videos/mtr_navigator_schedule_teams.webm?source=example-site"&gt;
+  Watch Tutorial Video
+&lt;/a&gt;</code></pre>
+    </div>
+
+    <div class="example">
+        <h2>❌ Incorrect: Direct Image Embed</h2>
+        <p>This will NOT track analytics (bypasses the SPA):</p>
+        <pre><code>&lt;img src="https://ctg-tme.github.io/learn-cisco-devices/deployments/mtr-navigator/images/mtr_navigator_schedule_teams.png"&gt;</code></pre>
+        <p><strong>Why it doesn't work:</strong> Direct file access doesn't load the SPA, so no JavaScript runs and no analytics are captured.</p>
+    </div>
+
+    <div class="example">
+        <h2>📊 Source Parameter</h2>
+        <p>Always add <code>?source=your-site-name</code> to track where traffic comes from:</p>
+        <ul>
+            <li><code>?source=partner-website</code></li>
+            <li><code>?source=internal-docs</code></li>
+            <li><code>?source=email-newsletter</code></li>
+            <li><code>?source=social-media</code></li>
+        </ul>
+    </div>
+
+    <div class="example">
+        <h2>🎯 Multiple Links Example</h2>
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_meet_now.png?source=example-site" 
+           class="link-card">
+            Meet Now Tutorial
+        </a>
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_join_qr.png?source=example-site" 
+           class="link-card">
+            Join with QR Code
+        </a>
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_share_wired_connection.png?source=example-site" 
+           class="link-card">
+            Share Content Tutorial
+        </a>
+    </div>
+
+    <hr style="margin: 3rem 0;">
+    
+    <h2>Summary</h2>
+    <ul>
+        <li>✅ Use <code>/media/{deployment}/{type}/{filename}</code> URLs</li>
+        <li>✅ Add <code>?source=your-identifier</code> parameter</li>
+        <li>✅ Use as clickable links, not direct embeds</li>
+        <li>❌ Don't use direct file paths like <code>/deployments/...</code></li>
+        <li>❌ Don't use as <code>&lt;img src=""&gt;</code> values</li>
+    </ul>
+</body>
+</html>

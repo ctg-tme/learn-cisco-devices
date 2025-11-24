@@ -117,8 +117,83 @@ class CiscoDeviceApp {
     return info;
   }
 
+  handleMediaProxyRoute(path) {
+    // Handle routes like /media/{deployment}/{type}/{filename}
+    // Example: /learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png
+    const repoName = window.SPA_CONFIG.REPO_NAME;
+    let cleanPath = path;
+    
+    // Remove repo name from path if present
+    if (path.startsWith(repoName)) {
+      cleanPath = path.substring(repoName.length);
+    }
+    
+    // Match pattern: /media/{deployment}/{type}/{filename}
+    const mediaMatch = cleanPath.match(/^\/media\/([^\/]+)\/(images|videos)\/(.+)$/);
+    
+    if (!mediaMatch) {
+      return false; // Not a media proxy route
+    }
+    
+    const [, deployment, mediaType, filename] = mediaMatch;
+    const actualPath = `deployments/${deployment}/${mediaType}/${filename}`;
+    const fullUrl = this.getAbsolutePath(actualPath);
+    
+    // Extract source parameter for tracking where the link came from
+    const sourceParam = this.urlParams.get('source') || 'direct';
+    const referrer = document.referrer || 'none';
+    
+    // Track media access via proxy
+    if (window.aptabaseEvent) {
+      window.aptabaseEvent('media_proxy_access', {
+        'deployment': deployment,
+        'media_type': mediaType,
+        'filename': filename,
+        'source': sourceParam,
+        'referrer': referrer,
+        'full_path': actualPath
+      });
+    }
+    
+    // Redirect to the actual file for both images and videos
+    // This allows the media to be used in <img> tags and <video> tags
+    // while still tracking analytics
+    window.location.replace(fullUrl);
+    
+    return true; // Handled as media proxy route
+  }
+
+  renderMediaProxyPage(deployment, mediaType, filename, mediaUrl) {
+    const app = document.getElementById('app');
+    const deploymentName = deployment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    
+    document.title = `${filename} - Learn Cisco Devices`;
+    
+    app.innerHTML = `
+      <div class="header">
+        <h1>Media: ${filename}</h1>
+        <p>From ${deploymentName}</p>
+      </div>
+      <div class="container">
+        <div class="media-proxy-container" style="text-align: center; padding: 2rem;">
+          <img src="${mediaUrl}" alt="${filename}" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          <div style="margin-top: 2rem;">
+            <a href="${mediaUrl}" download="${filename}" class="button" style="display: inline-block; padding: 0.75rem 1.5rem; background: #0d6efd; color: white; text-decoration: none; border-radius: 4px; margin-right: 1rem;">Download Image</a>
+            <a href="${this.getAbsolutePath(deployment)}" class="button" style="display: inline-block; padding: 0.75rem 1.5rem; background: #6c757d; color: white; text-decoration: none; border-radius: 4px;">View All Tutorials</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   handleRoute() {
     const path = window.location.pathname;
+    
+    // Check if this is a media proxy route first
+    if (this.handleMediaProxyRoute(path)) {
+      return;
+    }
+    
     const routeName = this.getRouteFromPath(path);
     this.renderPage(routeName);
   }

@@ -66,7 +66,7 @@ npm run thumbnails:force
 - Linux: `apt-get install ffmpeg`
 
 The script automatically:
-- Captures a frame at 1 second (configurable with `--time`)
+- Captures a frame at 3 second (configurable with `--time`)
 - Places thumbnails in the `images/` directory (sibling to `videos/`)
 - Skips existing thumbnails when processing directories (unless `--force` is used)
 - Always regenerates when a specific file is provided
@@ -140,3 +140,47 @@ This allows maintaining tutorials for customers on older software versions while
 - QR code generation for mobile access
 - Auto-close functionality for Cisco touch devices
 - Modular deployment structure
+- **Media proxy URLs for analytics tracking** (see below)
+
+## Media Proxy URLs for Analytics
+
+To track when external sites access your images and videos, use the media proxy URLs instead of direct file links. These URLs route through the SPA and log analytics events via Aptabase.
+
+### URL Format
+
+**Images:**
+```
+https://ctg-tme.github.io/learn-cisco-devices/media/{deployment}/images/{filename}
+```
+
+**Videos:**
+```
+https://ctg-tme.github.io/learn-cisco-devices/media/{deployment}/videos/{filename}
+```
+
+### Example
+
+**Old direct link (no analytics):**
+```
+https://ctg-tme.github.io/learn-cisco-devices/mtr-navigator/images/mtr_navigator_schedule_teams.png
+```
+
+**New trackable link (with analytics):**
+```
+https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png?source=partner-site
+```
+
+### How It Works
+
+- **Images**: Display on a simple page with download/navigation options
+- **Videos**: Redirect to the actual video file for browser playback
+- **Analytics**: Every access logs a `media_proxy_access` event with deployment, media type, filename, source, and referrer
+
+### Source Parameter
+
+Add `?source=identifier` to track which external site is linking:
+- `?source=partner-website`
+- `?source=internal-docs`
+- `?source=email-campaign`
+
+**Important:** These URLs are for clickable links, not direct `<img>` embeds. See `docs/media-proxy-urls.md` for full documentation and `docs/external-site-example.html` for integration examples.
