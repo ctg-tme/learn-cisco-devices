@@ -142,7 +142,10 @@ class CiscoDeviceApp {
     // Redirect to the actual file for both images and videos
     // This allows the media to be used in <img> tags and <video> tags
     // Analytics are tracked via the augmented page_loaded event in aptabase.js
-    window.location.replace(fullUrl);
+    // Small delay to ensure analytics event is sent before redirect
+    setTimeout(() => {
+      window.location.replace(fullUrl);
+    }, 100);
     
     return true; // Handled as media proxy route
   }
