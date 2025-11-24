@@ -144,21 +144,33 @@ class CiscoDeviceApp {
     const referrer = document.referrer || 'none';
     
     // Track media access via proxy
+    const eventData = {
+      'deployment': deployment,
+      'media_type': mediaType,
+      'filename': filename,
+      'source': sourceParam,
+      'referrer': referrer,
+      'full_path': actualPath
+    };
+    
     if (window.aptabaseEvent) {
-      window.aptabaseEvent('media_proxy_access', {
-        'deployment': deployment,
-        'media_type': mediaType,
-        'filename': filename,
-        'source': sourceParam,
-        'referrer': referrer,
-        'full_path': actualPath
-      });
+      try {
+        console.log('[Media Proxy] Tracking event:', eventData);
+        window.aptabaseEvent('media_proxy_access', eventData);
+        console.log('[Media Proxy] Event tracked successfully');
+      } catch (e) {
+        console.error('[Media Proxy] Failed to track event:', e);
+      }
+    } else {
+      console.warn('[Media Proxy] aptabaseEvent not available');
     }
     
-    // Redirect to the actual file for both images and videos
-    // This allows the media to be used in <img> tags and <video> tags
-    // while still tracking analytics
-    window.location.replace(fullUrl);
+    // Small delay to ensure analytics event is sent before redirect
+    // This is necessary because window.location.replace cancels pending requests
+    setTimeout(() => {
+      console.log('[Media Proxy] Redirecting to:', fullUrl);
+      window.location.replace(fullUrl);
+    }, 100);
     
     return true; // Handled as media proxy route
   }
