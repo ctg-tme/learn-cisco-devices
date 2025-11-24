@@ -144,23 +144,43 @@ class CiscoDeviceApp {
     const referrer = document.referrer || 'none';
     
     // Track media access via proxy
-    if (window.aptabaseEvent) {
-      window.aptabaseEvent('media_proxy_access', {
-        'deployment': deployment,
-        'media_type': mediaType,
-        'filename': filename,
-        'source': sourceParam,
-        'referrer': referrer,
-        'full_path': actualPath
-      });
+    const trackAndRedirect = () => {
+      if (window.aptabaseEvent) {
+        window.aptabaseEvent('media_proxy_access', {
+          'deployment': deployment,
+          'media_type': mediaType,
+          'filename': filename,
+          'source': sourceParam,
+          'referrer': referrer,
+          'full_path': actualPath
+        });
+      }
       
       // Small delay to ensure analytics event is sent before redirect
       setTimeout(() => {
         window.location.replace(fullUrl);
-      }, 100);
+      }, 150);
+    };
+    
+    // Wait for Aptabase to be ready before tracking and redirecting
+    if (window.aptabaseReady) {
+      trackAndRedirect();
     } else {
-      // If aptabase not ready, redirect immediately
-      window.location.replace(fullUrl);
+      // Wait for aptabase initialization, with timeout fallback
+      const checkReady = setInterval(() => {
+        if (window.aptabaseReady) {
+          clearInterval(checkReady);
+          trackAndRedirect();
+        }
+      }, 50);
+      
+      // Fallback: redirect after 1 second even if aptabase not ready
+      setTimeout(() => {
+        clearInterval(checkReady);
+        if (!window.aptabaseReady) {
+          window.location.replace(fullUrl);
+        }
+      }, 1000);
     }
     
     return true; // Handled as media proxy route
