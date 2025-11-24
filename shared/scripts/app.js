@@ -139,32 +139,13 @@ class CiscoDeviceApp {
     const actualPath = `deployments/${deployment}/${mediaType}/${filename}`;
     const fullUrl = this.getAbsolutePath(actualPath);
     
-    // Redirect to the actual file for both images and videos
-    // This allows the media to be used in <img> tags and <video> tags
-    // Wait for Aptabase to be ready and send the event before redirecting
-    const waitForAnalyticsAndRedirect = () => {
-      const maxWait = 2000; // Maximum 2 seconds
-      const startTime = Date.now();
-      
-      const checkAndRedirect = () => {
-        if (window.aptabaseReady) {
-          // Aptabase is ready, give it a moment to send the event
-          setTimeout(() => {
-            window.location.replace(fullUrl);
-          }, 150);
-        } else if (Date.now() - startTime < maxWait) {
-          // Keep checking
-          setTimeout(checkAndRedirect, 50);
-        } else {
-          // Timeout - redirect anyway
-          window.location.replace(fullUrl);
-        }
-      };
-      
-      checkAndRedirect();
-    };
-    
-    waitForAnalyticsAndRedirect();
+    // Use meta refresh instead of immediate redirect to give analytics time to send
+    // This is more reliable than setTimeout for analytics tracking
+    const head = document.head || document.getElementsByTagName('head')[0];
+    const meta = document.createElement('meta');
+    meta.httpEquiv = 'refresh';
+    meta.content = `0;url=${fullUrl}`;
+    head.appendChild(meta);
     
     return true; // Handled as media proxy route
   }
