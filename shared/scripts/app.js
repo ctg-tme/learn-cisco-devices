@@ -143,8 +143,7 @@ class CiscoDeviceApp {
     const sourceParam = this.urlParams.get('source') || 'direct';
     const referrer = document.referrer || 'none';
     
-    // Track media access via proxy and redirect
-    // Use sendBeacon API if available for reliable tracking before redirect
+    // Track media access via proxy
     if (window.aptabaseEvent) {
       window.aptabaseEvent('media_proxy_access', {
         'deployment': deployment,
@@ -156,10 +155,10 @@ class CiscoDeviceApp {
       });
     }
     
-    // Redirect to actual file after brief delay to allow event to send
-    setTimeout(() => {
-      window.location.replace(fullUrl);
-    }, 100);
+    // Redirect to the actual file for both images and videos
+    // This allows the media to be used in <img> tags and <video> tags
+    // while still tracking analytics
+    window.location.replace(fullUrl);
     
     return true; // Handled as media proxy route
   }
