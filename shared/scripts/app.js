@@ -153,12 +153,15 @@ class CiscoDeviceApp {
         'referrer': referrer,
         'full_path': actualPath
       });
+      
+      // Small delay to ensure analytics event is sent before redirect
+      setTimeout(() => {
+        window.location.replace(fullUrl);
+      }, 100);
+    } else {
+      // If aptabase not ready, redirect immediately
+      window.location.replace(fullUrl);
     }
-    
-    // Redirect to the actual file for both images and videos
-    // This allows the media to be used in <img> tags and <video> tags
-    // while still tracking analytics
-    window.location.replace(fullUrl);
     
     return true; // Handled as media proxy route
   }
