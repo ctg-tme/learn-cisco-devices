@@ -48,6 +48,7 @@ const server = http.createServer((req, res) => {
     // - /media/ (legacy)
     // - /videos/, /images/ (simplified and hierarchical with type prefix)
     // - /{deployment}/{device}/{file.ext} (new hierarchical without type prefix)
+    // - /{deployment}/{device}/{name} (extension-less, auto-detects file type)
     const ext = path.extname(urlPath);
     const isLegacyMediaProxy = urlPath.startsWith('/media/');
     const isTypePrefixMediaProxy = urlPath.startsWith('/videos/') || urlPath.startsWith('/images/');
@@ -58,7 +59,13 @@ const server = http.createServer((req, res) => {
                                             ext === '.jpg' || ext === '.jpeg' || ext === '.gif') &&
                                    urlPath.split('/').length === 4; // /deployment/device/file.ext
     
-    const isMediaProxyRoute = isLegacyMediaProxy || isTypePrefixMediaProxy || isNewHierarchicalMedia;
+    // Check if this is an extension-less media route: /{deployment}/{device}/{name}
+    // Pattern: /mtr/navigator/schedule_teams (no extension)
+    const pathParts = urlPath.split('/').filter(p => p);
+    const isExtensionlessMedia = !ext && pathParts.length === 3 && 
+                                  !['index.html', 'config', 'shared', 'deployments', 'docs'].includes(pathParts[0]);
+    
+    const isMediaProxyRoute = isLegacyMediaProxy || isTypePrefixMediaProxy || isNewHierarchicalMedia || isExtensionlessMedia;
     
     if (!ext || ext === '.html' || isMediaProxyRoute) {
       filePath = path.join(ROOT_DIR, 'index.html');

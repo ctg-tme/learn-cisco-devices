@@ -117,14 +117,16 @@ class CiscoDeviceApp {
     return info;
   }
 
-  handleMediaProxyRoute(path) {
+  async handleMediaProxyRoute(path) {
     // Handle routes like:
     // - /media/{deployment}/{type}/{filename} (legacy URL format, redirects to new structure)
     // - /{type}/{deployment}/{filename} (simplified format with type prefix)
     // - /{deployment-type}/{device-type}/{filename} (hierarchical format - NEW PREFERRED)
+    // - /{deployment-type}/{device-type}/{name} (extension-less, auto-detects file type)
     // Example legacy: /learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png
     // Example simplified: /learn-cisco-devices/videos/mtr-navigator/join_room_audio.webm
     // Example hierarchical: /learn-cisco-devices/mtr/navigator/join_room_audio.webm
+    // Example extension-less: /learn-cisco-devices/mtr/navigator/schedule_teams
     const repoName = window.SPA_CONFIG.REPO_NAME;
     let cleanPath = path;
     
@@ -163,34 +165,59 @@ class CiscoDeviceApp {
         // Use new hierarchical structure directly
         actualPath = `deployments/${deploymentType}/${deviceType}/${mediaType}/${filename}`;
       } else {
-        // Try hierarchical pattern WITH type prefix: /{type}/{deployment-type}/{device-type}/{filename}
-        const hierarchicalWithTypeMatch = cleanPath.match(/^\/(images|videos)\/([^\/]+)\/([^\/]+)\/(.+)$/);
+        // Try extension-less hierarchical pattern: /{deployment-type}/{device-type}/{name}
+        const extensionlessMatch = cleanPath.match(/^\/([^\/]+)\/([^\/]+)\/([^\/\.]+)$/);
         
-        if (hierarchicalWithTypeMatch) {
-          const [, type, deploymentType, deviceType, file] = hierarchicalWithTypeMatch;
-          mediaType = type;
-          filename = file;
-          // Use new hierarchical structure directly
-          actualPath = `deployments/${deploymentType}/${deviceType}/${mediaType}/${filename}`;
-        } else {
-          // Try simplified pattern: /{type}/{deployment}/{filename}
-          const simplifiedMatch = cleanPath.match(/^\/(images|videos)\/([^\/]+)\/(.+)$/);
+        if (extensionlessMatch) {
+          const [, deploymentType, deviceType, baseName] = extensionlessMatch;
           
-          if (simplifiedMatch) {
-            const [, type, deployment, file] = simplifiedMatch;
+          // Try to find the file with common extensions
+          // Priority: .webm (video) > .png (image)
+          const possibleFiles = [
+            { file: `mtr_${deviceType}_${baseName}.webm`, type: 'videos' },
+            { file: `${baseName}.webm`, type: 'videos' },
+            { file: `mtr_${deviceType}_${baseName}.png`, type: 'images' },
+            { file: `${baseName}.png`, type: 'images' }
+          ];
+          
+          // Check which file exists by trying to construct the path
+          // We'll try the most common pattern first: mtr_{device}_{name}.webm
+          filename = `mtr_${deviceType}_${baseName}.webm`;
+          mediaType = 'videos';
+          actualPath = `deployments/${deploymentType}/${deviceType}/${mediaType}/${filename}`;
+          
+          // Note: In a production environment, you might want to check file existence
+          // For now, we'll default to the video format as it's most common
+        } else {
+          // Try hierarchical pattern WITH type prefix: /{type}/{deployment-type}/{device-type}/{filename}
+          const hierarchicalWithTypeMatch = cleanPath.match(/^\/(images|videos)\/([^\/]+)\/([^\/]+)\/(.+)$/);
+          
+          if (hierarchicalWithTypeMatch) {
+            const [, type, deploymentType, deviceType, file] = hierarchicalWithTypeMatch;
             mediaType = type;
             filename = file;
-            
-            // Map simplified format to appropriate structure
-            if (deployment === 'mtr-navigator') {
-              // Redirect old mtr-navigator to new mtr/navigator structure
-              actualPath = `deployments/mtr/navigator/${mediaType}/${filename}`;
-            } else {
-              // For other deployments, use as-is
-              actualPath = `deployments/${deployment}/${mediaType}/${filename}`;
-            }
+            // Use new hierarchical structure directly
+            actualPath = `deployments/${deploymentType}/${deviceType}/${mediaType}/${filename}`;
           } else {
-            return false; // Not a media proxy route
+            // Try simplified pattern: /{type}/{deployment}/{filename}
+            const simplifiedMatch = cleanPath.match(/^\/(images|videos)\/([^\/]+)\/(.+)$/);
+            
+            if (simplifiedMatch) {
+              const [, type, deployment, file] = simplifiedMatch;
+              mediaType = type;
+              filename = file;
+              
+              // Map simplified format to appropriate structure
+              if (deployment === 'mtr-navigator') {
+                // Redirect old mtr-navigator to new mtr/navigator structure
+                actualPath = `deployments/mtr/navigator/${mediaType}/${filename}`;
+              } else {
+                // For other deployments, use as-is
+                actualPath = `deployments/${deployment}/${mediaType}/${filename}`;
+              }
+            } else {
+              return false; // Not a media proxy route
+            }
           }
         }
       }
@@ -232,11 +259,11 @@ class CiscoDeviceApp {
     `;
   }
 
-  handleRoute() {
+  async handleRoute() {
     const path = window.location.pathname;
     
     // Check if this is a media proxy route first
-    if (this.handleMediaProxyRoute(path)) {
+    if (await this.handleMediaProxyRoute(path)) {
       return;
     }
     

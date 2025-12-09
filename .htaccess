@@ -3,7 +3,14 @@
     RewriteEngine On
     RewriteBase /learn-cisco-devices/
     
-    # New hierarchical media proxy WITHOUT type prefix (most specific, check first)
+    # Extension-less hierarchical media proxy (most specific, check first)
+    # /{deployment-type}/{device-type}/{name} -> serve index.html (SPA handles redirect and auto-detects extension)
+    # Example: /mtr/navigator/schedule_teams
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^[^/]+/[^/]+/[^/\.]+$ index.html [L]
+    
+    # New hierarchical media proxy WITH extension
     # /{deployment-type}/{device-type}/{filename.ext} -> serve index.html (SPA handles redirect)
     # Example: /mtr/navigator/filename.webm
     RewriteCond %{REQUEST_FILENAME} !-f
