@@ -79,14 +79,14 @@
             "default": true
           },
           {
-            "title": "Join a meeting with QR code",
+            "title": "Join a meeting using the QR code",
             "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_qr_11.png",
             "video": "deployments/mtr-navigator/videos/mtr_navigator_join_qr_11.webm",
             "tags": ["qr"],
             "version": "RoomOS 11"
           },
           {
-            "title": "Join a meeting with QR code",
+            "title": "Join a meeting using the QR code",
             "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_qr.png",
             "video": "deployments/mtr-navigator/videos/mtr_navigator_join_qr.webm",
             "tags": ["qr"],
@@ -109,14 +109,14 @@
             "default": true
           },
           {
-            "title": "Use Microsoft Teams to add your device to the meeting",
+            "title": "Add your device to a scheduled meeting",
             "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_room_audio_11.png",
             "video": "deployments/mtr-navigator/videos/mtr_navigator_join_room_audio_11.webm",
             "tags": ["audio"],
             "version": "RoomOS 11"
           },
           {
-            "title": "Use Microsoft Teams to add your device to the meeting",
+            "title": "Add your device to a scheduled meeting",
             "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_room_audio.png",
             "video": "deployments/mtr-navigator/videos/mtr_navigator_join_room_audio.webm",
             "tags": ["audio"],
