@@ -1,3 +1,27 @@
+# URL Rewriting for simplified media proxy routes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /learn-cisco-devices/
+    
+    # Simplified media proxy routes (new format)
+    # /videos/{deployment}/{filename} -> serve index.html (SPA handles redirect)
+    # /images/{deployment}/{filename} -> serve index.html (SPA handles redirect)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(videos|images)/[^/]+/.+$ index.html [L]
+    
+    # Legacy media proxy routes (for backward compatibility)
+    # /media/{deployment}/{type}/{filename} -> serve index.html (SPA handles redirect)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^media/[^/]+/(videos|images)/.+$ index.html [L]
+    
+    # General SPA routing - serve index.html for all other non-file routes
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.html [L]
+</IfModule>
+
 # Security Headers for Apache/GitHub Pages fallback
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"

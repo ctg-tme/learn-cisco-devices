@@ -118,8 +118,11 @@ class CiscoDeviceApp {
   }
 
   handleMediaProxyRoute(path) {
-    // Handle routes like /media/{deployment}/{type}/{filename}
-    // Example: /learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png
+    // Handle routes like:
+    // - /media/{deployment}/{type}/{filename} (legacy, for backward compatibility)
+    // - /{type}/{deployment}/{filename} (new simplified format)
+    // Example legacy: /learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png
+    // Example new: /learn-cisco-devices/videos/mtr-navigator/join_room_audio.webm
     const repoName = window.SPA_CONFIG.REPO_NAME;
     let cleanPath = path;
     
@@ -128,14 +131,24 @@ class CiscoDeviceApp {
       cleanPath = path.substring(repoName.length);
     }
     
-    // Match pattern: /media/{deployment}/{type}/{filename}
-    const mediaMatch = cleanPath.match(/^\/media\/([^\/]+)\/(images|videos)\/(.+)$/);
+    let deployment, mediaType, filename;
     
-    if (!mediaMatch) {
-      return false; // Not a media proxy route
+    // Try legacy pattern first: /media/{deployment}/{type}/{filename}
+    const legacyMatch = cleanPath.match(/^\/media\/([^\/]+)\/(images|videos)\/(.+)$/);
+    
+    if (legacyMatch) {
+      [, deployment, mediaType, filename] = legacyMatch;
+    } else {
+      // Try new simplified pattern: /{type}/{deployment}/{filename}
+      const simplifiedMatch = cleanPath.match(/^\/(images|videos)\/([^\/]+)\/(.+)$/);
+      
+      if (simplifiedMatch) {
+        [, mediaType, deployment, filename] = simplifiedMatch;
+      } else {
+        return false; // Not a media proxy route
+      }
     }
     
-    const [, deployment, mediaType, filename] = mediaMatch;
     const actualPath = `deployments/${deployment}/${mediaType}/${filename}`;
     const fullUrl = this.getAbsolutePath(actualPath);
     

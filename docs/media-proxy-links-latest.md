@@ -2,10 +2,21 @@
 
 This document contains all media proxy URLs for the latest/default versions of images and videos.
 
-## Base URL
+## URL Formats
+
+### Simplified Format (Recommended)
 ```
-https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator
+https://ctg-tme.github.io/learn-cisco-devices/videos/{deployment}/{filename}
+https://ctg-tme.github.io/learn-cisco-devices/images/{deployment}/{filename}
 ```
+
+### Legacy Format (Still Supported)
+```
+https://ctg-tme.github.io/learn-cisco-devices/media/{deployment}/videos/{filename}
+https://ctg-tme.github.io/learn-cisco-devices/media/{deployment}/images/{filename}
+```
+
+**Note:** Both formats are fully supported and will continue to work. The simplified format is recommended for new integrations as it's shorter and easier to share.
 
 ---
 
@@ -13,12 +24,22 @@ https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator
 
 ### Schedule a meeting with Microsoft Teams Calendar
 
-**Thumbnail Image:**
+**Thumbnail Image (Simplified):**
+```
+https://ctg-tme.github.io/learn-cisco-devices/images/mtr-navigator/mtr_navigator_schedule_teams.png
+```
+
+**Thumbnail Image (Legacy):**
 ```
 https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png
 ```
 
-**Video:**
+**Video (Simplified):**
+```
+https://ctg-tme.github.io/learn-cisco-devices/videos/mtr-navigator/mtr_navigator_schedule_teams.webm
+```
+
+**Video (Legacy):**
 ```
 https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/videos/mtr_navigator_schedule_teams.webm
 ```
@@ -77,12 +98,22 @@ https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/videos/mtr_nav
 
 ### Use Microsoft Teams to add your device to the meeting
 
-**Thumbnail Image:**
+**Thumbnail Image (Simplified):**
+```
+https://ctg-tme.github.io/learn-cisco-devices/images/mtr-navigator/mtr_navigator_join_room_audio.png
+```
+
+**Thumbnail Image (Legacy):**
 ```
 https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_join_room_audio.png
 ```
 
-**Video:**
+**Video (Simplified):**
+```
+https://ctg-tme.github.io/learn-cisco-devices/videos/mtr-navigator/mtr_navigator_join_room_audio.webm
+```
+
+**Video (Legacy):**
 ```
 https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/videos/mtr_navigator_join_room_audio.webm
 ```
