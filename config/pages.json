@@ -11,7 +11,7 @@
         "id": "mtr-navigator",
         "name": "Cisco Devices Microsoft Teams Rooms",
         "subtitle": "with Cisco Navigator touch controller",
-        "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_schedule_teams_11.png"
+        "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_schedule_teams_11.png"
       }
     ]
   },
@@ -29,30 +29,30 @@
         "videos": [
           {
             "title": "Schedule a meeting with Microsoft Teams Calendar",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_schedule_teams_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_schedule_teams_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_schedule_teams_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_schedule_teams_11.webm",
             "tags": ["calendar"],
             "version": "RoomOS 11"
           },
           {
             "title": "Schedule a meeting with Microsoft Teams Calendar",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_schedule_teams.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_schedule_teams.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_schedule_teams.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_schedule_teams.webm",
             "tags": ["calendar"],
             "version": "RoomOS 26",
             "default": true
           },
           {
             "title": "Meet now with Cisco Navigator touch controller",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_meet_now_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_meet_now_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_meet_now_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_meet_now_11.webm",
             "tags": ["navigator"],
             "version": "RoomOS 11"
           },
           {
             "title": "Meet now with Cisco Navigator touch controller",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_meet_now.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_meet_now.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_meet_now.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_meet_now.webm",
             "tags": ["navigator"],
             "version": "RoomOS 26",
             "default": true
@@ -65,60 +65,60 @@
         "videos": [
           {
             "title": "Join a scheduled meeting",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_scheduled_meeting_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_join_scheduled_meeting_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_scheduled_meeting_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_join_scheduled_meeting_11.webm",
             "tags": ["obtp"],
             "version": "RoomOS 11"
           },
           {
             "title": "Join a scheduled meeting",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_scheduled_meeting.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_join_scheduled_meeting.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_scheduled_meeting.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_join_scheduled_meeting.webm",
             "tags": ["obtp"],
             "version": "RoomOS 26",
             "default": true
           },
           {
             "title": "Join a meeting using the QR code",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_qr_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_join_qr_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_qr_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_join_qr_11.webm",
             "tags": ["qr"],
             "version": "RoomOS 11"
           },
           {
             "title": "Join a meeting using the QR code",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_qr.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_join_qr.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_qr.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_join_qr.webm",
             "tags": ["qr"],
             "version": "RoomOS 26",
             "default": true
           },
           {
             "title": "Join a Webex/Zoom meeting with meeting ID",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_webex_zoom_id_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_join_webex_zoom_id_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_webex_zoom_id_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_join_webex_zoom_id_11.webm",
             "tags": ["third-party", "webex", "zoom"],
             "version": "RoomOS 11"
           },
           {
             "title": "Join a Webex/Zoom meeting with meeting ID",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_webex_zoom_id.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_join_webex_zoom_id.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_webex_zoom_id.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_join_webex_zoom_id.webm",
             "tags": ["third-party", "webex", "zoom"],
             "version": "RoomOS 26",
             "default": true
           },
           {
             "title": "Add your device to a scheduled meeting",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_room_audio_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_join_room_audio_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_room_audio_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_join_room_audio_11.webm",
             "tags": ["audio"],
             "version": "RoomOS 11"
           },
           {
             "title": "Add your device to a scheduled meeting",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_join_room_audio.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_join_room_audio.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_room_audio.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_join_room_audio.webm",
             "tags": ["audio"],
             "version": "RoomOS 26",
             "default": true
@@ -131,60 +131,60 @@
         "videos": [
           {
             "title": "Share content using a wired connection",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_share_wired_connection_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_share_wired_connection_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_wired_connection_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_share_wired_connection_11.webm",
             "tags": ["wired"],
             "version": "RoomOS 11"
           },
           {
             "title": "Share content using a wired connection",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_share_wired_connection.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_share_wired_connection.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_wired_connection.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_share_wired_connection.webm",
             "tags": ["wired"],
             "version": "RoomOS 26",
             "default": true
           },
           {
             "title": "Share with PowerPoint Live",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_share_powerpoint_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_share_powerpoint_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_powerpoint_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_share_powerpoint_11.webm",
             "tags": ["powerpoint"],
             "version": "RoomOS 11"
           },
           {
             "title": "Share with PowerPoint Live",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_share_powerpoint.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_share_powerpoint.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_powerpoint.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_share_powerpoint.webm",
             "tags": ["powerpoint"],
             "version": "RoomOS 26",
             "default": true
           },
           {
             "title": "Share with Miracast",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_share_miracast_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_share_miracast_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_miracast_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_share_miracast_11.webm",
             "tags": ["miracast", "wirelessShare"],
             "version": "RoomOS 11"
           },
           {
             "title": "Share with Miracast",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_share_miracast.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_share_miracast.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_miracast.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_share_miracast.webm",
             "tags": ["miracast", "wirelessShare"],
             "version": "RoomOS 26",
             "default": true
           },
           {
             "title": "Share with Airplay",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_share_airplay_11.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_share_airplay_11.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_airplay_11.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_share_airplay_11.webm",
             "tags": ["airplay", "wirelessShare"],
             "version": "RoomOS 11"
           },
           {
             "title": "Share with Airplay",
-            "thumbnail": "deployments/mtr-navigator/images/mtr_navigator_share_airplay.png",
-            "video": "deployments/mtr-navigator/videos/mtr_navigator_share_airplay.webm",
+            "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_airplay.png",
+            "video": "deployments/mtr/navigator/videos/mtr_navigator_share_airplay.webm",
             "tags": ["airplay", "wirelessShare"],
             "version": "RoomOS 26",
             "default": true

@@ -44,11 +44,21 @@ const server = http.createServer((req, res) => {
   // Check if file exists
   if (!fs.existsSync(filePath)) {
     // For SPA routing, serve index.html for non-existent routes
-    // Special case: /media/ routes (legacy) and /videos/, /images/ routes (new) are SPA routes for analytics tracking
+    // Special case: Media proxy routes are SPA routes for analytics tracking
+    // - /media/ (legacy)
+    // - /videos/, /images/ (simplified and hierarchical with type prefix)
+    // - /{deployment}/{device}/{file.ext} (new hierarchical without type prefix)
     const ext = path.extname(urlPath);
-    const isMediaProxyRoute = urlPath.startsWith('/media/') || 
-                               urlPath.startsWith('/videos/') || 
-                               urlPath.startsWith('/images/');
+    const isLegacyMediaProxy = urlPath.startsWith('/media/');
+    const isTypePrefixMediaProxy = urlPath.startsWith('/videos/') || urlPath.startsWith('/images/');
+    
+    // Check if this is a new hierarchical media route: /{deployment}/{device}/{file.ext}
+    // Pattern: /mtr/navigator/filename.webm
+    const isNewHierarchicalMedia = ext && (ext === '.webm' || ext === '.mp4' || ext === '.png' || 
+                                            ext === '.jpg' || ext === '.jpeg' || ext === '.gif') &&
+                                   urlPath.split('/').length === 4; // /deployment/device/file.ext
+    
+    const isMediaProxyRoute = isLegacyMediaProxy || isTypePrefixMediaProxy || isNewHierarchicalMedia;
     
     if (!ext || ext === '.html' || isMediaProxyRoute) {
       filePath = path.join(ROOT_DIR, 'index.html');

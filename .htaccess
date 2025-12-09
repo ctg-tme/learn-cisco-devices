@@ -1,9 +1,23 @@
-# URL Rewriting for simplified media proxy routes
+# URL Rewriting for media proxy routes
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /learn-cisco-devices/
     
-    # Simplified media proxy routes (new format)
+    # New hierarchical media proxy WITHOUT type prefix (most specific, check first)
+    # /{deployment-type}/{device-type}/{filename.ext} -> serve index.html (SPA handles redirect)
+    # Example: /mtr/navigator/filename.webm
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^[^/]+/[^/]+/[^/]+\.(webm|mp4|png|jpg|jpeg|gif)$ index.html [L]
+    
+    # Hierarchical media proxy routes WITH type prefix
+    # /videos/{deployment-type}/{device-type}/{filename} -> serve index.html (SPA handles redirect)
+    # /images/{deployment-type}/{device-type}/{filename} -> serve index.html (SPA handles redirect)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(videos|images)/[^/]+/[^/]+/.+$ index.html [L]
+    
+    # Simplified media proxy routes
     # /videos/{deployment}/{filename} -> serve index.html (SPA handles redirect)
     # /images/{deployment}/{filename} -> serve index.html (SPA handles redirect)
     RewriteCond %{REQUEST_FILENAME} !-f

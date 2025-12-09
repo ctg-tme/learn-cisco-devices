@@ -119,10 +119,12 @@ class CiscoDeviceApp {
 
   handleMediaProxyRoute(path) {
     // Handle routes like:
-    // - /media/{deployment}/{type}/{filename} (legacy, for backward compatibility)
-    // - /{type}/{deployment}/{filename} (new simplified format)
+    // - /media/{deployment}/{type}/{filename} (legacy URL format, redirects to new structure)
+    // - /{type}/{deployment}/{filename} (simplified format with type prefix)
+    // - /{deployment-type}/{device-type}/{filename} (hierarchical format - NEW PREFERRED)
     // Example legacy: /learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png
-    // Example new: /learn-cisco-devices/videos/mtr-navigator/join_room_audio.webm
+    // Example simplified: /learn-cisco-devices/videos/mtr-navigator/join_room_audio.webm
+    // Example hierarchical: /learn-cisco-devices/mtr/navigator/join_room_audio.webm
     const repoName = window.SPA_CONFIG.REPO_NAME;
     let cleanPath = path;
     
@@ -131,25 +133,69 @@ class CiscoDeviceApp {
       cleanPath = path.substring(repoName.length);
     }
     
-    let deployment, mediaType, filename;
+    let actualPath, mediaType, filename;
     
     // Try legacy pattern first: /media/{deployment}/{type}/{filename}
     const legacyMatch = cleanPath.match(/^\/media\/([^\/]+)\/(images|videos)\/(.+)$/);
     
     if (legacyMatch) {
-      [, deployment, mediaType, filename] = legacyMatch;
-    } else {
-      // Try new simplified pattern: /{type}/{deployment}/{filename}
-      const simplifiedMatch = cleanPath.match(/^\/(images|videos)\/([^\/]+)\/(.+)$/);
+      const [, deployment, type, file] = legacyMatch;
+      mediaType = type;
+      filename = file;
       
-      if (simplifiedMatch) {
-        [, mediaType, deployment, filename] = simplifiedMatch;
+      // Map legacy deployments to new structure
+      if (deployment === 'mtr-navigator') {
+        actualPath = `deployments/mtr/navigator/${mediaType}/${filename}`;
       } else {
-        return false; // Not a media proxy route
+        // For other legacy deployments, keep old structure
+        actualPath = `deployments/${deployment}/${mediaType}/${filename}`;
+      }
+    } else {
+      // Try new hierarchical pattern WITHOUT type prefix: /{deployment-type}/{device-type}/{filename}
+      // This needs to be checked before the pattern with type prefix to avoid conflicts with page routes
+      const newHierarchicalMatch = cleanPath.match(/^\/([^\/]+)\/([^\/]+)\/([^\/]+\.(webm|png|jpg|jpeg|gif|mp4))$/);
+      
+      if (newHierarchicalMatch) {
+        const [, deploymentType, deviceType, file] = newHierarchicalMatch;
+        filename = file;
+        // Determine media type from file extension
+        mediaType = file.match(/\.(webm|mp4)$/) ? 'videos' : 'images';
+        // Use new hierarchical structure directly
+        actualPath = `deployments/${deploymentType}/${deviceType}/${mediaType}/${filename}`;
+      } else {
+        // Try hierarchical pattern WITH type prefix: /{type}/{deployment-type}/{device-type}/{filename}
+        const hierarchicalWithTypeMatch = cleanPath.match(/^\/(images|videos)\/([^\/]+)\/([^\/]+)\/(.+)$/);
+        
+        if (hierarchicalWithTypeMatch) {
+          const [, type, deploymentType, deviceType, file] = hierarchicalWithTypeMatch;
+          mediaType = type;
+          filename = file;
+          // Use new hierarchical structure directly
+          actualPath = `deployments/${deploymentType}/${deviceType}/${mediaType}/${filename}`;
+        } else {
+          // Try simplified pattern: /{type}/{deployment}/{filename}
+          const simplifiedMatch = cleanPath.match(/^\/(images|videos)\/([^\/]+)\/(.+)$/);
+          
+          if (simplifiedMatch) {
+            const [, type, deployment, file] = simplifiedMatch;
+            mediaType = type;
+            filename = file;
+            
+            // Map simplified format to appropriate structure
+            if (deployment === 'mtr-navigator') {
+              // Redirect old mtr-navigator to new mtr/navigator structure
+              actualPath = `deployments/mtr/navigator/${mediaType}/${filename}`;
+            } else {
+              // For other deployments, use as-is
+              actualPath = `deployments/${deployment}/${mediaType}/${filename}`;
+            }
+          } else {
+            return false; // Not a media proxy route
+          }
+        }
       }
     }
     
-    const actualPath = `deployments/${deployment}/${mediaType}/${filename}`;
     const fullUrl = this.getAbsolutePath(actualPath);
     
     // Use meta refresh instead of immediate redirect to give analytics time to send
@@ -224,6 +270,17 @@ class CiscoDeviceApp {
       return 'homepage';
     }
     
+    // Handle hierarchical route structure: map /mtr/navigator to mtr-navigator
+    // This allows both /mtr-navigator and /mtr/navigator to work
+    const hierarchicalRouteMatch = pathWithoutIndex.match(/^([^\/]+)\/([^\/]+)$/);
+    if (hierarchicalRouteMatch) {
+      const [, deploymentType, deviceType] = hierarchicalRouteMatch;
+      // Check if this maps to a known deployment (e.g., mtr/navigator -> mtr-navigator)
+      const mappedRoute = `${deploymentType}-${deviceType}`;
+      // Return the mapped route if it exists in config, otherwise return as-is
+      return mappedRoute;
+    }
+    
     return pathWithoutIndex;
   }
 
@@ -250,6 +307,15 @@ class CiscoDeviceApp {
     } else if (pageConfig.type === 'deployment') {
       this.renderDeploymentPage(pageConfig);
     }
+  }
+
+  convertToHierarchicalRoute(deploymentId) {
+    // Convert deployment IDs like "mtr-navigator" to hierarchical format "mtr/navigator"
+    // This makes URLs cleaner and more future-proof
+    if (deploymentId.includes('-')) {
+      return deploymentId.replace('-', '/');
+    }
+    return deploymentId;
   }
 
   renderHomepage(config) {
@@ -298,8 +364,10 @@ class CiscoDeviceApp {
       </header>
       <div class="container">
         <ul class="deployment-grid" aria-label="Available device tutorials">
-          ${deployments.map(deployment => `
-            <li class="deployment-card" data-route="${deployment.id}" tabindex="0" 
+          ${deployments.map(deployment => {
+            const hierarchicalRoute = this.convertToHierarchicalRoute(deployment.id);
+            return `
+            <li class="deployment-card" data-route="${hierarchicalRoute}" tabindex="0" 
                 aria-label="Open ${deployment.name} ${deployment.subtitle} tutorials">
               <img data-src="${this.getAbsolutePath(deployment.thumbnail)}" alt="" class="deployment-thumbnail lazy-load" role="presentation">
               <div class="deployment-info">
@@ -307,7 +375,7 @@ class CiscoDeviceApp {
                 <p class="deployment-subtitle">${deployment.subtitle}</p>
               </div>
             </li>
-          `).join('')}
+          `}).join('')}
         </ul>
       </div>
     `;

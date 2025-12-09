@@ -55,36 +55,40 @@
     <p>This page demonstrates how external websites should link to Learn Cisco Devices media files to enable analytics tracking.</p>
 
     <div class="example">
-        <h2>✅ Recommended: Simplified Trackable Image Link</h2>
-        <p>Use the new simplified URL format (shorter and easier to share):</p>
-        <a href="https://ctg-tme.github.io/learn-cisco-devices/images/mtr-navigator/mtr_navigator_schedule_teams.png?source=example-site" 
+        <h2>✅ Recommended: Hierarchical Trackable Image Link</h2>
+        <p>Use the new hierarchical URL format (most future-proof):</p>
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/images/mtr/navigator/mtr_navigator_schedule_teams.png?source=example-site" 
            class="link-card">
             View Tutorial: Schedule Teams Meeting
         </a>
-        <pre><code>&lt;a href="https://ctg-tme.github.io/learn-cisco-devices/images/mtr-navigator/mtr_navigator_schedule_teams.png?source=example-site"&gt;
+        <pre><code>&lt;a href="https://ctg-tme.github.io/learn-cisco-devices/images/mtr/navigator/mtr_navigator_schedule_teams.png?source=example-site"&gt;
   View Tutorial: Schedule Teams Meeting
 &lt;/a&gt;</code></pre>
     </div>
 
     <div class="example">
-        <h2>✅ Recommended: Simplified Trackable Video Link</h2>
-        <p>Use the new simplified URL format for videos:</p>
-        <a href="https://ctg-tme.github.io/learn-cisco-devices/videos/mtr-navigator/mtr_navigator_schedule_teams.webm?source=example-site" 
+        <h2>✅ Recommended: Hierarchical Trackable Video Link</h2>
+        <p>Use the new hierarchical URL format for videos:</p>
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/videos/mtr/navigator/mtr_navigator_schedule_teams.webm?source=example-site" 
            class="link-card">
             Watch Tutorial Video
         </a>
-        <pre><code>&lt;a href="https://ctg-tme.github.io/learn-cisco-devices/videos/mtr-navigator/mtr_navigator_schedule_teams.webm?source=example-site"&gt;
+        <pre><code>&lt;a href="https://ctg-tme.github.io/learn-cisco-devices/videos/mtr/navigator/mtr_navigator_schedule_teams.webm?source=example-site"&gt;
   Watch Tutorial Video
 &lt;/a&gt;</code></pre>
     </div>
 
     <div class="example">
-        <h2>✅ Legacy Format (Still Supported)</h2>
-        <p>The old format with /media/ still works for backward compatibility:</p>
-        <pre><code>&lt;a href="https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/images/mtr_navigator_schedule_teams.png?source=example-site"&gt;
+        <h2>✅ Alternative Formats (Also Supported)</h2>
+        <p>Simplified format (without deployment-type/device-type separation):</p>
+        <pre><code>&lt;a href="https://ctg-tme.github.io/learn-cisco-devices/videos/mtr-navigator/mtr_navigator_schedule_teams.webm?source=example-site"&gt;
   View Tutorial
 &lt;/a&gt;</code></pre>
-        <p><strong>Note:</strong> Both formats work identically. Use the simplified format for new integrations.</p>
+        <p>Legacy format (original /media/ structure):</p>
+        <pre><code>&lt;a href="https://ctg-tme.github.io/learn-cisco-devices/media/mtr-navigator/videos/mtr_navigator_schedule_teams.webm?source=example-site"&gt;
+  View Tutorial
+&lt;/a&gt;</code></pre>
+        <p><strong>Note:</strong> All three formats work identically. Use the hierarchical format for new integrations.</p>
     </div>
 
     <div class="example">
@@ -106,16 +110,16 @@
     </div>
 
     <div class="example">
-        <h2>🎯 Multiple Links Example (Simplified Format)</h2>
-        <a href="https://ctg-tme.github.io/learn-cisco-devices/images/mtr-navigator/mtr_navigator_meet_now.png?source=example-site" 
+        <h2>🎯 Multiple Links Example (Hierarchical Format)</h2>
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/images/mtr/navigator/mtr_navigator_meet_now.png?source=example-site" 
            class="link-card">
             Meet Now Tutorial
         </a>
-        <a href="https://ctg-tme.github.io/learn-cisco-devices/videos/mtr-navigator/mtr_navigator_join_qr.webm?source=example-site" 
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/videos/mtr/navigator/mtr_navigator_join_qr.webm?source=example-site" 
            class="link-card">
             Join with QR Code
         </a>
-        <a href="https://ctg-tme.github.io/learn-cisco-devices/videos/mtr-navigator/mtr_navigator_share_wired_connection.webm?source=example-site" 
+        <a href="https://ctg-tme.github.io/learn-cisco-devices/videos/mtr/navigator/mtr_navigator_share_wired_connection.webm?source=example-site" 
            class="link-card">
             Share Content Tutorial
         </a>
@@ -125,7 +129,8 @@
     
     <h2>Summary</h2>
     <ul>
-        <li>✅ <strong>Recommended:</strong> Use simplified URLs: <code>/videos/{deployment}/{filename}</code> or <code>/images/{deployment}/{filename}</code></li>
+        <li>✅ <strong>Recommended:</strong> Use hierarchical URLs: <code>/videos/{deployment-type}/{device-type}/{filename}</code></li>
+        <li>✅ <strong>Alternative:</strong> Simplified format: <code>/videos/{deployment}/{filename}</code></li>
         <li>✅ <strong>Legacy:</strong> Old format still works: <code>/media/{deployment}/{type}/{filename}</code></li>
         <li>✅ Add <code>?source=your-identifier</code> parameter to track traffic sources</li>
         <li>✅ Use as clickable links, not direct embeds</li>
