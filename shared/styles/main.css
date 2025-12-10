@@ -112,24 +112,28 @@
 /* Modal accessibility improvements */
 .modal-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 0 0 1rem 0;
+  padding: 1rem;
   margin: 0;
+  background: #ffffff;
+  border-radius: 8px 8px 0 0;
+  position: relative;
 }
 
 #modal-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #1a1a1a;
   margin: 0;
-  flex: 1;
-  padding-right: 1rem;
+  text-align: center;
 }
 
 .modal-body {
   padding: 0;
   margin: 0;
+  background: #000;
+  border-radius: 0 0 8px 8px;
 }
 
 html {
@@ -529,14 +533,13 @@ h3.video-title {
 .modal video {
   width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
 }
 
 .close-button {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(71, 142, 255, 0.8);
+  left: 1rem;
+  background: rgba(71, 142, 255, 0.9);
   border: none;
   color: #FFFFFF;
   font-size: 16px;
@@ -544,7 +547,6 @@ h3.video-title {
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
   z-index: 10;
 }
 
