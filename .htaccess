@@ -5,7 +5,8 @@
     
     # Redirect old mtr-navigator file paths to new mtr/navigator structure
     # This handles direct file access to the old location
-    RewriteRule ^deployments/mtr-navigator/(videos|images)/(.+)$ deployments/mtr/navigator/$1/$2 [R=301,L]
+    # Force redirect even if old file exists (no RewriteCond)
+    RewriteRule ^deployments/mtr-navigator/(videos|images)/(.+)$ deployments/mtr/navigator/$1/$2 [R=301,L,QSA]
     
     # Extension-less hierarchical media proxy (most specific, check first)
     # /{deployment-type}/{device-type}/{name} -> serve index.html (SPA handles redirect and auto-detects extension)
