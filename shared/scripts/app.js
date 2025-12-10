@@ -540,7 +540,8 @@ class CiscoDeviceApp {
           <button class="video-button" 
                   aria-label="Play tutorial: ${video.title}"
                   data-video-src="${this.getAbsolutePath(video.video)}"
-                  onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}')">
+                  data-video-title="${video.title.replace(/"/g, '&quot;')}"
+                  onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}', '${video.title.replace(/'/g, "\\'")}')">
             <div class="video-thumbnail">
               <img data-src="${this.getAbsolutePath(video.thumbnail)}" alt="" class="lazy-load" role="presentation">
               ${versionBadge}
@@ -617,12 +618,23 @@ class CiscoDeviceApp {
     });
   }
 
-  openModal(mediaSrc) {
+  openModal(mediaSrc, videoTitle = null) {
     const modal = document.getElementById('videoModal');
     const modalVideo = document.getElementById('modalVideo');
     const modalGif = document.getElementById('modalGif');
     const modalTitle = document.getElementById('modal-title');
     const videoDescription = document.getElementById('video-description');
+    
+    // Set the video title if provided
+    if (videoTitle) {
+      modalTitle.textContent = videoTitle;
+      modalTitle.classList.remove('visually-hidden');
+    } else {
+      // Fallback to extracting title from filename
+      const title = this.getVideoTitle(mediaSrc);
+      modalTitle.textContent = title;
+      modalTitle.classList.remove('visually-hidden');
+    }
     
     // Store the currently focused element to restore later
     this.focusedElementBeforeModal = document.activeElement;
@@ -702,9 +714,8 @@ class CiscoDeviceApp {
     }
     
     // Set up accessibility attributes and content
-    const videoTitle = this.getVideoTitle(mediaSrc);
-    modalTitle.textContent = videoTitle;
-    videoDescription.textContent = `Tutorial video: ${videoTitle}. Use video controls to play, pause, or adjust volume. Press Escape or click Back to close.`;
+    const titleForDescription = videoTitle || this.getVideoTitle(mediaSrc);
+    videoDescription.textContent = `Tutorial video: ${titleForDescription}. Use video controls to play, pause, or adjust volume. Press Escape or click Back to close.`;
     
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
@@ -763,8 +774,8 @@ class CiscoDeviceApp {
     return isCiscoNavigator || isRoomOS;
   }
 
-  playVideo(videoSrc) {
-    this.openModal(videoSrc);
+  playVideo(videoSrc, videoTitle = null) {
+    this.openModal(videoSrc, videoTitle);
   }
 
   startAutoCloseTimer() {

@@ -28,14 +28,14 @@
         "title": "Create a Meeting",
         "videos": [
           {
-            "title": "Schedule a meeting with Microsoft Teams Calendar",
+            "title": "Schedule a meeting in Microsoft Teams",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_schedule_teams_11.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_schedule_teams_11.webm",
             "tags": ["calendar"],
             "version": "RoomOS 11"
           },
           {
-            "title": "Schedule a meeting with Microsoft Teams Calendar",
+            "title": "Schedule a meeting in Microsoft Teams",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_schedule_teams.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_schedule_teams.webm",
             "tags": ["calendar"],
@@ -43,14 +43,14 @@
             "default": true
           },
           {
-            "title": "Meet now with Cisco Navigator touch controller",
+            "title": "Start a new meeting",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_meet_now_11.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_meet_now_11.webm",
             "tags": ["navigator"],
             "version": "RoomOS 11"
           },
           {
-            "title": "Meet now with Cisco Navigator touch controller",
+            "title": "Start a new meeting",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_meet_now.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_meet_now.webm",
             "tags": ["navigator"],
@@ -94,14 +94,14 @@
             "default": true
           },
           {
-            "title": "Join a Webex/Zoom meeting with meeting ID",
+            "title": "Join a Webex or Zoom meeting",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_webex_zoom_id_11.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_join_webex_zoom_id_11.webm",
             "tags": ["third-party", "webex", "zoom"],
             "version": "RoomOS 11"
           },
           {
-            "title": "Join a Webex/Zoom meeting with meeting ID",
+            "title": "Join a Webex or Zoom meeting",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_webex_zoom_id.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_join_webex_zoom_id.webm",
             "tags": ["third-party", "webex", "zoom"],

@@ -10,10 +10,13 @@
  * Install: brew install ffmpeg (macOS) or apt-get install ffmpeg (Linux)
  * 
  * Usage:
- *   node generate-thumbnails.js                    # Process all videos in all subdirectories
- *   node generate-thumbnails.js <directory>        # Process videos in specific directory
- *   node generate-thumbnails.js <video-file>       # Process single video file
- *   node generate-thumbnails.js --time 2.5         # Capture at 2.5 seconds
+ *   node generate-thumbnails.js                              # Process all videos in all subdirectories
+ *   node generate-thumbnails.js <directory>                  # Process videos in specific directory
+ *   node generate-thumbnails.js <video-file>                 # Process single video file
+ *   node generate-thumbnails.js --time 2.5                   # Capture at 2.5 seconds
+ *   node generate-thumbnails.js --force                      # Force regenerate existing thumbnails
+ *   node generate-thumbnails.js --exclude _11                # Exclude files containing "_11"
+ *   node generate-thumbnails.js --force --exclude _11        # Combine flags
  */
 
 const { execSync } = require('child_process');
@@ -56,10 +59,16 @@ function generateThumbnail(videoPath, outputPath, captureTime = DEFAULT_CAPTURE_
   }
 }
 
-function processVideo(videoPath, captureTime, forceRegenerate = false) {
+function processVideo(videoPath, captureTime, forceRegenerate = false, excludePattern = null) {
   const ext = path.extname(videoPath);
   const dir = path.dirname(videoPath);
   const basename = path.basename(videoPath, ext);
+  
+  // Check if file should be excluded based on pattern
+  if (excludePattern && basename.includes(excludePattern)) {
+    console.log(`⏭️  Skipping (excluded): ${videoPath}`);
+    return true;
+  }
   
   // Determine output path
   // If video is in a 'videos' directory, put thumbnail in sibling 'images' directory
@@ -89,7 +98,7 @@ function processVideo(videoPath, captureTime, forceRegenerate = false) {
   return generateThumbnail(videoPath, outputPath, captureTime);
 }
 
-function processDirectory(dirPath, captureTime) {
+function processDirectory(dirPath, captureTime, excludePattern = null) {
   console.log(`\n📂 Processing directory: ${dirPath}\n`);
   
   let processedCount = 0;
@@ -108,7 +117,7 @@ function processDirectory(dirPath, captureTime) {
         const ext = path.extname(file).toLowerCase();
         if (VIDEO_EXTENSIONS.includes(ext)) {
           processedCount++;
-          if (processVideo(filePath, captureTime)) {
+          if (processVideo(filePath, captureTime, false, excludePattern)) {
             successCount++;
           }
         }
@@ -131,6 +140,7 @@ function main() {
   const args = process.argv.slice(2);
   let targetPath = 'deployments'; // Default to deployments directory
   let captureTime = DEFAULT_CAPTURE_TIME;
+  let excludePattern = null;
   
   // Parse --time argument
   const timeIndex = args.indexOf('--time');
@@ -144,8 +154,15 @@ function main() {
     }
   }
   
+  // Parse --exclude argument
+  const excludeIndex = args.indexOf('--exclude');
+  if (excludeIndex !== -1 && args[excludeIndex + 1]) {
+    excludePattern = args[excludeIndex + 1];
+    console.log(`🚫 Excluding files containing: "${excludePattern}"\n`);
+  }
+  
   // Get target path (filter out flag arguments)
-  const pathArgs = args.filter(arg => !arg.startsWith('--') && arg !== args[timeIndex + 1]);
+  const pathArgs = args.filter(arg => !arg.startsWith('--') && arg !== args[timeIndex + 1] && arg !== args[excludeIndex + 1]);
   if (pathArgs.length > 0) {
     targetPath = pathArgs[0];
   }
@@ -159,12 +176,12 @@ function main() {
   const stat = fs.statSync(targetPath);
   
   if (stat.isDirectory()) {
-    processDirectory(targetPath, captureTime);
+    processDirectory(targetPath, captureTime, excludePattern);
   } else if (stat.isFile()) {
     const ext = path.extname(targetPath).toLowerCase();
     if (VIDEO_EXTENSIONS.includes(ext)) {
       // When a specific file is provided, always regenerate (force=true)
-      if (processVideo(targetPath, captureTime, true)) {
+      if (processVideo(targetPath, captureTime, true, excludePattern)) {
         console.log('\n✅ Thumbnail generated successfully');
       } else {
         console.log('\n❌ Failed to generate thumbnail');
