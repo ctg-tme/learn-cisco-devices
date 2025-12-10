@@ -6,10 +6,18 @@
       "title": "Learn how to use your Cisco device",
       "subtitle": "Select your deployment type to view relevant tutorials"
     },
+    "helpSection": {
+      "title": "Open the Cisco side panel",
+      "video": {
+        "title": "Open the Cisco side panel on Cisco Navigator touch panel",
+        "thumbnail": "deployments/mtr/navigator/mtr_navigator_side_panel.png",
+        "video": "deployments/mtr/navigator/mtr_navigator_side_panel.webm"
+      }
+    },
     "deployments": [
       {
         "id": "mtr-navigator",
-        "name": "Cisco Devices Microsoft Teams Rooms",
+        "name": "Cisco Devices for Microsoft Teams Rooms",
         "subtitle": "with Cisco Navigator touch controller",
         "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_schedule_teams_11.png"
       }

@@ -383,6 +383,35 @@ class CiscoDeviceApp {
     }
     
     const deployments = config.deployments || [];
+    const helpSection = config.helpSection;
+    
+    // Build help section HTML if it exists
+    let helpSectionHtml = '';
+    if (helpSection && helpSection.video) {
+      const video = helpSection.video;
+      helpSectionHtml = `
+        <section class="section">
+          <h2 class="section-title">${helpSection.title}</h2>
+          <ul class="video-grid">
+            <li class="video-card">
+              <button class="video-button" 
+                      aria-label="Play tutorial: ${video.title}"
+                      data-video-src="${this.getAbsolutePath(video.video)}"
+                      data-video-title="${video.title.replace(/"/g, '&quot;')}"
+                      onclick="window.ciscoApp.playVideo('${this.getAbsolutePath(video.video)}', '${video.title.replace(/'/g, "\\'")}')">
+                <div class="video-thumbnail">
+                  <img data-src="${this.getAbsolutePath(video.thumbnail)}" alt="" class="lazy-load" role="presentation">
+                  <div class="play-button" aria-hidden="true"></div>
+                </div>
+                <div class="video-info">
+                  <h3 class="video-title">${video.title}</h3>
+                </div>
+              </button>
+            </li>
+          </ul>
+        </section>
+      `;
+    }
     
     app.innerHTML = `
       <header class="header">
@@ -390,20 +419,24 @@ class CiscoDeviceApp {
         <p class="subtitle">${config.header.subtitle}</p>
       </header>
       <div class="container">
-        <ul class="deployment-grid" aria-label="Available device tutorials">
-          ${deployments.map(deployment => {
-            const hierarchicalRoute = this.convertToHierarchicalRoute(deployment.id);
-            return `
-            <li class="deployment-card" data-route="${hierarchicalRoute}" tabindex="0" 
-                aria-label="Open ${deployment.name} ${deployment.subtitle} tutorials">
-              <img data-src="${this.getAbsolutePath(deployment.thumbnail)}" alt="" class="deployment-thumbnail lazy-load" role="presentation">
-              <div class="deployment-info">
-                <h2 class="deployment-name">${deployment.name}</h2>
-                <p class="deployment-subtitle">${deployment.subtitle}</p>
-              </div>
-            </li>
-          `}).join('')}
-        </ul>
+        ${helpSectionHtml}
+        <section class="section">
+          <h2 class="section-title">Deployments</h2>
+          <ul class="deployment-grid" aria-label="Available device tutorials">
+            ${deployments.map(deployment => {
+              const hierarchicalRoute = this.convertToHierarchicalRoute(deployment.id);
+              return `
+              <li class="deployment-card" data-route="${hierarchicalRoute}" tabindex="0" 
+                  aria-label="Open ${deployment.name} ${deployment.subtitle} tutorials">
+                <img data-src="${this.getAbsolutePath(deployment.thumbnail)}" alt="" class="deployment-thumbnail lazy-load" role="presentation">
+                <div class="deployment-info">
+                  <h2 class="deployment-name">${deployment.name}</h2>
+                  <p class="deployment-subtitle">${deployment.subtitle}</p>
+                </div>
+              </li>
+            `}).join('')}
+          </ul>
+        </section>
       </div>
     `;
     

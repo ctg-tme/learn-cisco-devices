@@ -576,10 +576,10 @@ h3.video-title {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  margin-top: 2rem;
-  width: 100%;
   list-style: none;
   padding: 0;
+  margin: 0;
+  width: 100%;
 }
 
 /* Limit single deployment items to 50% width on larger screens */
