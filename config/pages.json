@@ -19,7 +19,7 @@
         "id": "mtr-navigator",
         "name": "Cisco Devices for Microsoft Teams Rooms",
         "subtitle": "with Cisco Navigator touch controller",
-        "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_schedule_teams_11.png"
+        "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_scheduled_meeting.png"
       }
     ]
   },

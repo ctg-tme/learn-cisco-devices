@@ -426,13 +426,18 @@ class CiscoDeviceApp {
             ${deployments.map(deployment => {
               const hierarchicalRoute = this.convertToHierarchicalRoute(deployment.id);
               return `
-              <li class="deployment-card" data-route="${hierarchicalRoute}" tabindex="0" 
-                  aria-label="Open ${deployment.name} ${deployment.subtitle} tutorials">
-                <img data-src="${this.getAbsolutePath(deployment.thumbnail)}" alt="" class="deployment-thumbnail lazy-load" role="presentation">
-                <div class="deployment-info">
-                  <h2 class="deployment-name">${deployment.name}</h2>
-                  <p class="deployment-subtitle">${deployment.subtitle}</p>
-                </div>
+              <li class="deployment-card">
+                <button class="deployment-button" 
+                        data-route="${hierarchicalRoute}" 
+                        aria-label="Open ${deployment.name} ${deployment.subtitle} tutorials">
+                  <div class="video-thumbnail">
+                    <img data-src="${this.getAbsolutePath(deployment.thumbnail)}" alt="" class="lazy-load" role="presentation">
+                  </div>
+                  <div class="deployment-info">
+                    <h3 class="deployment-name">${deployment.name}</h3>
+                    <p class="deployment-subtitle">${deployment.subtitle}</p>
+                  </div>
+                </button>
               </li>
             `}).join('')}
           </ul>
@@ -440,22 +445,12 @@ class CiscoDeviceApp {
       </div>
     `;
     
-    // Add click and keyboard handlers for deployment cards
-    const deploymentCards = document.querySelectorAll('.deployment-card');
-    deploymentCards.forEach(card => {
-      // Click handler
-      card.addEventListener('click', () => {
-        const route = card.getAttribute('data-route');
+    // Add click handlers for deployment buttons
+    const deploymentButtons = document.querySelectorAll('.deployment-button');
+    deploymentButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const route = button.getAttribute('data-route');
         this.navigateTo(route);
-      });
-      
-      // Keyboard handler
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          const route = card.getAttribute('data-route');
-          this.navigateTo(route);
-        }
       });
     });
     

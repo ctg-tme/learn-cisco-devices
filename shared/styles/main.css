@@ -534,6 +534,11 @@ h3.video-title {
   width: 100%;
   height: auto;
   border-radius: 0 0 8px 8px;
+  outline: none;
+}
+
+.modal video:focus {
+  outline: none;
 }
 
 .close-button {
@@ -599,6 +604,11 @@ h3.video-title {
 
 /* Deployment card styles */
 .deployment-card {
+  list-style: none;
+}
+
+.deployment-button {
+  width: 100%;
   background: #16283d;
   border-radius: 12px;
   overflow: hidden;
@@ -606,30 +616,47 @@ h3.video-title {
   cursor: pointer;
   border: 1px solid #26384f;
   position: relative;
+  display: block;
+  text-align: left;
+  padding: 0;
+  color: inherit;
 }
 
-.deployment-info {
-  padding: 1.5rem;
-}
-
-.deployment-card:hover {
+.deployment-button:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   border-color: #a1a9b2;
 }
 
-.deployment-thumbnail {
+.deployment-button .video-thumbnail {
   position: relative;
   width: 100%;
   height: 200px;
   overflow: hidden;
 }
 
-.deployment-thumbnail img {
+.deployment-button .video-thumbnail img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   opacity: 0.7;
+}
+
+.deployment-info {
+  padding: 1.5rem;
+}
+
+h3.deployment-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.deployment-subtitle {
+  color: #a1a9b2;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
 .deployment-overlay {
