@@ -705,10 +705,13 @@ body.dark-theme .deployment-card:hover {
   }
   
   .close-button {
-    top: 15px;
-    left: 15px;
     font-size: 14px;
     padding: 8px 16px;
+  }
+  
+  #modal-title {
+    font-size: 0.95rem;
+    padding-left: 90px;
   }
   
   .deployment-thumbnail {
