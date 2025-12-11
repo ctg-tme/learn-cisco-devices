@@ -34,6 +34,13 @@
       const path = window.location.pathname;
       const params = window.location.search;
       
+      // Redirect old mtr-navigator paths to new mtr/navigator structure
+      if (path.includes('/mtr-navigator/')) {
+        const newPath = path.replace('/mtr-navigator/', '/mtr/navigator/');
+        window.location.replace(window.location.origin + newPath + params);
+        return;
+      }
+      
       // If we're on a 404 page but the path looks like a valid route
       if (path !== '/' && path !== '/index.html' && path !== window.SPA_CONFIG.REPO_NAME + '/' && path !== window.SPA_CONFIG.REPO_NAME + '/index.html') {
         // Extract the route part after the repo name
