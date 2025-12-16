@@ -9,7 +9,7 @@
     "helpSection": {
       "title": "Open the Cisco side panel",
       "video": {
-        "title": "Open the Cisco side panel on Cisco Navigator touch panel",
+        "title": "Open the Cisco side panel on Cisco Navigator touch controller",
         "thumbnail": "deployments/mtr/navigator/mtr_navigator_side_panel.png",
         "video": "deployments/mtr/navigator/mtr_navigator_side_panel.webm"
       }
