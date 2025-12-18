@@ -168,14 +168,14 @@
             "default": true
           },
           {
-            "title": "Share with Miracast",
+            "title": "Share wirelessly with Miracast",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_miracast_11.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_share_miracast_11.webm",
             "tags": ["miracast", "wirelessShare"],
             "version": "RoomOS 11"
           },
           {
-            "title": "Share with Miracast",
+            "title": "Share wirelessly with Miracast",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_miracast.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_share_miracast.webm",
             "tags": ["miracast", "wirelessShare"],
@@ -183,14 +183,14 @@
             "default": true
           },
           {
-            "title": "Share with Airplay",
+            "title": "Share wirelessly with Airplay",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_airplay_11.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_share_airplay_11.webm",
             "tags": ["airplay", "wirelessShare"],
             "version": "RoomOS 11"
           },
           {
-            "title": "Share with Airplay",
+            "title": "Share wirelessly with Airplay",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_airplay.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_share_airplay.webm",
             "tags": ["airplay", "wirelessShare"],

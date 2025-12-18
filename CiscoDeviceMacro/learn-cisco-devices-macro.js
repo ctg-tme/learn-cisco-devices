@@ -77,7 +77,7 @@ const config = {
     Location: 'Auto',           // Auto/HomeScreen/HomeScreenAndCallControls/CallControls/ControlPanel/Hidden. Auto will place the Panel in a default location for either MTR or RoomOS. Any conflicts based on Software Platform will fall back to Auto
     PanelPosition: 999,         // The position thi panel sits amongst other Custom Panels. Note, in-built OS panels can not be moved
     Icon: 'Lightbulb',          // The UI Extension Icon you'd like to use. Note, if an IconURL is provided, the IconURL will override this value
-    IconUrl: 'https://avatars.githubusercontent.com/u/159071680?s=200&v=4'
+    //IconUrl: 'https://avatars.githubusercontent.com/u/159071680?s=200&v=4'
   },
   SiteSettings: {
     AutoTimeout: true,
@@ -137,7 +137,7 @@ let osPlatform = 'roomos';
  * @type {string}
  * @description The url to open for this solution
  */
-let url = `https://ctg-tme.github.io/learn-cisco-devices`;
+let url = `https://roomos.cisco.com/videos`;
 
 const oldLog = console.log;
 const oldInfo = console.info;
@@ -326,7 +326,7 @@ async function buildUI() {
 
   await xapi.Command.UserInterface.Extensions.Panel.Save({ PanelId: panelId }, `<Extensions><Panel><Order>${config.UserInterface.PanelPosition}</Order><Origin>local</Origin><Location>${location}</Location><Icon>${config.UserInterface.Icon}</Icon><Name>${config.UserInterface.Name}</Name><ActivityType>Custom</ActivityType></Panel></Extensions>`);
 
-  if (config.UserInterface.IconUrl != '' && config.UserInterface.IconUrl.includes('http')) {
+  if (config.UserInterface.IconUrl && config.UserInterface.IconUrl != '' && config.UserInterface.IconUrl.includes('http')) {
     await fetchIconByUrl(config.UserInterface.IconUrl, panelId)
   }
 
@@ -424,7 +424,7 @@ async function handlePanelClick({ Origin, PanelId, PeripheralId }) {
 
 function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)) }
 
-async function uptimeHandler(delayInMinutes = 2) {
+async function uptimeHandler(delayInMinutes = 5) {
   const targetUptimeMs = delayInMinutes * 1000 * 60;
   let currentUptime = (await xapi.Status.SystemUnit.Uptime.get() * 1000)
 
