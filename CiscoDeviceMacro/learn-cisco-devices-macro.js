@@ -139,11 +139,17 @@ let osPlatform = 'roomos';
  */
 let url = `https://roomos.cisco.com/videos`;
 
+/**
+ * @type {string}
+ * @description The panel ID for this macro
+ */
+const PANEL_ID = 'learn_cisco_devices';
+
 const oldLog = console.log;
 const oldInfo = console.info;
 const oldWarn = console.warn;
 const oldDebug = console.debug;
-const oldError = console.debug;
+const oldError = console.error;
 
 console.log = function (...args) { oldLog(`Log:`, ...args) };
 console.info = function (...args) { oldInfo(`Info:`, ...args) };
@@ -219,26 +225,24 @@ async function openApp(options) {
  *   Any xAPI command fails during the icon download or panel update process.
  */
 async function fetchIconByUrl(iconUrl, panelId) {
-  return new Promise(async (resolve, reject) => {
-    if (!iconUrl) reject({ Context: `iconUrl parameter "undefined"`, IconUrl: iconUrl });
-    if (!panelId) reject({ Context: `panelId parameter "undefined"`, PanelId: panelId });
-    if (!/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(iconUrl)) reject({ Context: `iconUrl parameter does not contain a valid Url`, iconUrl });
-    try {
-      const getIcon = (await xapi.Command.UserInterface.Extensions.Icon.Download({ Url: iconUrl }));
-      console.debug(`Icon Fetch Response: `, getIcon);
-      const iconId = getIcon.IconId
-      const uploadIcon = await xapi.Command.UserInterface.Extensions.Panel.Update({ IconId: iconId, Icon: 'Custom', PanelId: panelId });
-      console.debug('Icon Upload Response:', uploadIcon);
-      resolve({ Message: `Icon Applied`, PanelId: panelId, IconId: iconId });
-    } catch (e) {
-      let err = {
-        Context: `Failed to Fetch Icon`,
-        IconUrl: iconUrl,
-        Error: e
-      }
-      reject(err);
-    }
-  })
+  if (!iconUrl) throw { Context: `iconUrl parameter "undefined"`, IconUrl: iconUrl };
+  if (!panelId) throw { Context: `panelId parameter "undefined"`, PanelId: panelId };
+  if (!/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(iconUrl)) throw { Context: `iconUrl parameter does not contain a valid Url`, iconUrl };
+
+  try {
+    const getIcon = await xapi.Command.UserInterface.Extensions.Icon.Download({ Url: iconUrl });
+    console.debug(`Icon Fetch Response: `, getIcon);
+    const iconId = getIcon.IconId;
+    const uploadIcon = await xapi.Command.UserInterface.Extensions.Panel.Update({ IconId: iconId, Icon: 'Custom', PanelId: panelId });
+    console.debug('Icon Upload Response:', uploadIcon);
+    return { Message: `Icon Applied`, PanelId: panelId, IconId: iconId };
+  } catch (e) {
+    throw {
+      Context: `Failed to Fetch Icon`,
+      IconUrl: iconUrl,
+      Error: e
+    };
+  }
 }
 
 /** Used to validate the RoomOS version of the device
@@ -248,10 +252,9 @@ async function fetchIconByUrl(iconUrl, panelId) {
  */
 async function Validate_RoomOS_Version(minimumOs) {
   const reg = /^\D*(?<MAJOR>\d*)\.(?<MINOR>\d*)\.(?<EXTRAVERSION>\d*)\.(?<BUILDID>\d*).*$/i;
-  const minOs = minimumOs;
   const os = await xapi.Status.SystemUnit.Software.Version.get();
   const x = (reg.exec(os)).groups;
-  const y = (reg.exec(minOs)).groups;
+  const y = (reg.exec(minimumOs)).groups;
   if (parseInt(x.MAJOR) > parseInt(y.MAJOR)) return true;
   if (parseInt(x.MAJOR) < parseInt(y.MAJOR)) return false;
   if (parseInt(x.MINOR) > parseInt(y.MINOR)) return true;
@@ -284,45 +287,36 @@ async function Validate_RoomOS_Version(minimumOs) {
  */
 async function buildUI() {
   console.debug('Building UserInterface Panel...');
-  let location = 'ControlPanel';
 
-  if (osPlatform == 'mtr') {
-    // Handles Placement of Panel for MTR systems
-    switch (config.UserInterface.Location.toLowerCase()) {
-      case 'callcontrols':
-        location = 'CallControls' // Only Visible in Webex/SIP calls on MTR in the Call Controls UI
-        break;
-      case 'hidden':
-        location = 'Hidden' // Hides the Panel
-        break;
-      case 'auto': case 'homescreen': case 'controlpanel': case 'homescreenandcallcontrols': default:
-        location = 'ControlPanel' // Handles Conflicts and places panel in the ControlPanel location, which is always accessible in MTR
-        break;
+  // Location mapping for different platforms
+  const locationMap = {
+    mtr: {
+      callcontrols: 'CallControls',
+      hidden: 'Hidden',
+      auto: 'ControlPanel',
+      homescreen: 'ControlPanel',
+      controlpanel: 'ControlPanel',
+      homescreenandcallcontrols: 'ControlPanel',
+      default: 'ControlPanel'
+    },
+    roomos: {
+      callcontrols: 'CallControls',
+      hidden: 'Hidden',
+      homescreen: 'HomeScreen',
+      controlpanel: 'ControlPanel',
+      homescreenandcallcontrols: 'HomeScreenAndCallControls',
+      auto: 'HomeScreenAndCallControls',
+      default: 'HomeScreenAndCallControls'
     }
-  } else {
-    // Handles Placement for Panel in RoomOS systems
-    switch (config.UserInterface.Location.toLowerCase()) {
-      case 'callcontrols':
-        location = 'CallControls'
-        break;
-      case 'hidden':
-        location = 'Hidden'
-        break;
-      case 'homescreen':
-        location = 'HomeScreen'
-        break;
-      case 'controlpanel':
-        location = 'ControlPanel'
-        break;
-      case 'homescreenandcallcontrols': case 'auto': default:
-        location = 'HomeScreenAndCallControls'
-        break;
-    }
-  }
+  };
+
+  const platform = osPlatform === 'mtr' ? 'mtr' : 'roomos';
+  const locationKey = config.UserInterface.Location.toLowerCase();
+  const location = locationMap[platform][locationKey] || locationMap[platform].default;
 
   console.debug(`Panel location determined and is placed in [${location}]`);
 
-  let panelId = 'learn_cisco_devices'
+  const panelId = PANEL_ID
 
   await xapi.Command.UserInterface.Extensions.Panel.Save({ PanelId: panelId }, `<Extensions><Panel><Order>${config.UserInterface.PanelPosition}</Order><Origin>local</Origin><Location>${location}</Location><Icon>${config.UserInterface.Icon}</Icon><Name>${config.UserInterface.Name}</Name><ActivityType>Custom</ActivityType></Panel></Extensions>`);
 
@@ -354,48 +348,46 @@ async function buildUI() {
  * @global developer Assumes `developer` object (specifically `developer.Mode`) is globally accessible.
  * @global config Assumes `config` object (specifically `config.SiteSettings.AutoTimeout` and `config.SiteSettings.QRCode`) is globally accessible.
  */
-async function updateUrl() {
-  return new Promise(resolve => {
-    console.debug(`Updating URL:`, url)
-    let params = [];
+function updateUrl() {
+  console.debug(`Updating URL:`, url)
+  let params = [];
 
-    // remove trailing / if found in url path
-    url = url.endsWith('/') ? url.slice(0, -1) : url;
+  // remove trailing / if found in url path
+  url = url.endsWith('/') ? url.slice(0, -1) : url;
 
-    // append mtr content path if in MTR
-    if (osPlatform.toLowerCase() == 'mtr') {
-      url += '/mtr-navigator'
-    } else {
-      // url += '/roomos-navigator' // Not available as route yet
-    }
+  // append mtr content path if in MTR
+  if (osPlatform.toLowerCase() === 'mtr') {
+    url += '/mtr-navigator'
+  } else {
+    // url += '/roomos-navigator' // Not available as route yet
+  }
 
-    if (developer.Mode) {
-      params.push(`debug=true`);
-    }
+  if (developer.Mode) {
+    params.push(`debug=true`);
+  }
 
-    params.push(`timeout=${config.SiteSettings.AutoTimeout ? true : false}`);
+  params.push(`timeout=${config.SiteSettings.AutoTimeout}`);
 
-    switch (config.SiteSettings.QRCode.toString().toLowerCase()) {
-      case 'on': case 'true':
-        params.push(`qr=true`);
-        break;
-      case 'off': case 'false':
-        params.push(`qr=false`);
-        break;
-      case 'auto':
-        break;
-      default:
-        break;
-    }
+  switch (config.SiteSettings.QRCode.toString().toLowerCase()) {
+    case 'on': case 'true':
+      params.push(`qr=true`);
+      break;
+    case 'off': case 'false':
+      params.push(`qr=false`);
+      break;
+    case 'auto':
+      break;
+    default:
+      break;
+  }
 
-    if (params.length > 0) {
-      url += '?';
-      let paramString = params.join('&');
-      url += paramString;
-    }
-    console.info(`URL Updated:`, url)
-    resolve({ URL: url });
-  })
+  if (params.length > 0) {
+    url += '?';
+    let paramString = params.join('&');
+    url += paramString;
+  }
+  console.info(`URL Updated:`, url)
+  return new Promise(resolve => resolve({ URL: url }));
 }
 
 /**
@@ -417,7 +409,7 @@ async function updateUrl() {
 async function handlePanelClick({ Origin, PanelId, PeripheralId }) {
   console.log(Origin, PanelId, PeripheralId);
 
-  if (PanelId == 'learn_cisco_devices') {
+  if (PanelId === PANEL_ID) {
     await openApp({ Target: Origin });
   }
 }
@@ -429,10 +421,10 @@ async function uptimeHandler(delayInMinutes = 5) {
   let currentUptime = (await xapi.Status.SystemUnit.Uptime.get() * 1000)
 
   console.log(`Checking system uptime...`);
-  if (currentUptime < targetUptimeMs){
+  if (currentUptime < targetUptimeMs) {
     console.log(`Waiting for system uptime to reach a minimum uptime of ${delayInMinutes} minutes...`)
   }
-  
+
   while (currentUptime < targetUptimeMs) {
     try {
       currentUptime = (await xapi.Status.SystemUnit.Uptime.get() * 1000)
@@ -441,7 +433,9 @@ async function uptimeHandler(delayInMinutes = 5) {
     }
 
     if (currentUptime < targetUptimeMs) {
-      await delay(1000); // Wait 1 second before checking again
+      // Use exponential backoff: start at 5s, max at 30s
+      const waitTime = Math.min(5000 + (Math.floor((targetUptimeMs - currentUptime) / 60000) * 1000), 30000);
+      await delay(waitTime);
     }
   }
 
@@ -495,59 +489,58 @@ async function init() {
     throw new Error(msg)
   }
 
-  /** Configure Device to enable WebEngine use */
+  /** Configure Device to enable WebEngine use - run in parallel */
   try {
-    await xapi.Config.WebEngine.Mode.set('On');
+    await xapi.Config.WebEngine.Mode.set('On')
   } catch (e) {
-    console.error('Error setting WebEngine.Mode:', e);
+    console.warn('Caught Error on Config.WebEngine.Mode.set(:', e.message)
+  }
+  try {
+    await xapi.Config.WebEngine.Features.AllowDeviceCertificate.set('True')
+  } catch (e) {
+    console.warn('Caught Error on Config.WebEngine.Features.AllowDeviceCertificate.set:', e.message)
   }
 
   try {
-    await xapi.Config.WebEngine.Features.AllowDeviceCertificate.set('True');
+    await xapi.Config.WebEngine.Features.GpuRasterization.set('On')
   } catch (e) {
-    console.error('Error setting WebEngine.Features.AllowDeviceCertificate:', e);
+    console.warn('Caught Error on Config.WebEngine.Features.GpuRasterization.set:', e.message)
   }
 
   try {
-    await xapi.Config.WebEngine.Features.GpuRasterization.set('On');
+    await xapi.Config.WebEngine.Features.WebGL.set('On')
   } catch (e) {
-    console.error('Error setting WebEngine.Features.GpuRasterization:', e);
+    console.warn('Caught Error on Config.WebEngine.Features.WebGL.set:', e.message)
   }
 
   try {
-    await xapi.Config.WebEngine.Features.WebGL.set('On');
+    await xapi.Config.WebEngine.Features.Xapi.Peripherals.AllowedHosts.Hosts.set('*')
   } catch (e) {
-    console.error('Error setting WebEngine.Features.WebGL:', e);
+    console.warn('Caught Error on Config.WebEngine.Features.Xapi.Peripherals.AllowedHosts.Hosts.set:', e.message)
   }
 
   try {
-    await xapi.Config.WebEngine.Features.Xapi.Peripherals.AllowedHosts.Hosts.set('*');
+    await xapi.Config.WebEngine.Features.Peripherals.WebGL.set('On')
   } catch (e) {
-    console.error('Error setting WebEngine.Features.Xapi.Peripherals.AllowedHosts.Hosts:', e);
+    console.warn('Caught Error on Config.WebEngine.Features.Peripherals.WebGL.set:', e.message)
   }
 
   try {
-    await xapi.Config.WebEngine.Features.Peripherals.WebGL.set('On');
+    await xapi.Config.WebEngine.Features.Peripherals.AudioOutput.set('On')
   } catch (e) {
-    console.error('Error setting WebEngine.Features.Peripherals.WebGL:', e);
+    console.warn('Caught Error on Config.WebEngine.Features.Peripherals.AudioOutput.set:', e.message)
   }
 
   try {
-    await xapi.Config.WebEngine.Features.Peripherals.AudioOutput.set('On');
-  } catch (e) {
-    console.error('Error setting WebEngine.Features.Peripherals.AudioOutput:', e);
-  }
+    const check4mtr = await xapi.Status.MicrosoftTeams.Software.get()
 
-  try {
-      const check4mtr = await xapi.Status.MicrosoftTeams.Software.get()
-
-      if (check4mtr?.Version?.Android) {
-        console.debug('MTR System Detected')
-        osPlatform = 'mtr';
-      }
-    } catch (e) {
-      console.debug({ Context: 'MTR Not detected, this error is ok to ignore', Error: e.message });
+    if (check4mtr?.Version?.Android) {
+      console.debug('MTR System Detected')
+      osPlatform = 'mtr';
     }
+  } catch (e) {
+    console.debug({ Context: 'MTR Not detected, this error is ok to ignore', Error: e.message });
+  }
 
   if (developer.Mode && developer.PlatformOverride.Mode) {
     switch (developer.PlatformOverride.Platform.toLowerCase()) {
@@ -558,7 +551,7 @@ async function init() {
     }
   }
 
-  updateUrl();
+  await updateUrl();
   await buildUI();
 
   xapi.Event.UserInterface.Extensions.Panel.Clicked.on(handlePanelClick);
