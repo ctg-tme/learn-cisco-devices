@@ -425,30 +425,39 @@ async function handlePanelClick({ Origin, PanelId, PeripheralId }) {
 
 function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)) }
 
-async function uptimeHandler(delayInMinutes = 5) {
-  const targetUptimeMs = delayInMinutes * 1000 * 60;
-  let currentUptime = (await xapi.Status.SystemUnit.Uptime.get() * 1000)
-
-  console.log(`Checking system uptime...`);
-  if (currentUptime < targetUptimeMs) {
-    console.log(`Waiting for system uptime to reach a minimum uptime of ${delayInMinutes} minutes...`)
-  }
-
-  while (currentUptime < targetUptimeMs) {
+/**
+ * Detects if the device is running in MTR mode by retrying the MicrosoftTeams
+ * status check with increasing delays. This avoids a fixed uptime wait and
+ * allows the macro to proceed as soon as the status becomes available.
+ *
+ * @param {number} [maxRetries=10] Maximum number of retry attempts.
+ * @param {number} [initialDelayMs=5000] Delay before the first retry (ms).
+ * @param {number} [maxDelayMs=20000] Maximum delay between retries (ms).
+ * @returns {Promise<boolean>} Resolves true if MTR is detected, false otherwise.
+ */
+async function detectMTR(maxRetries = 10, initialDelayMs = 5000, maxDelayMs = 20000) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      currentUptime = (await xapi.Status.SystemUnit.Uptime.get() * 1000)
-    } catch (error) {
-      console.error("Error getting system uptime:", error);
+      const check4mtr = await xapi.Status.MicrosoftTeams.Software.get();
+      if (check4mtr?.Version?.Android) {
+        console.debug(`MTR System Detected on attempt ${attempt}`);
+        return true;
+      }
+    } catch (e) {
+      // Expected to fail on non-MTR devices or if MTR services haven't started yet
+      console.debug(`MTR detection attempt ${attempt}/${maxRetries} failed: ${e.message}`);
     }
 
-    if (currentUptime < targetUptimeMs) {
-      // Use exponential backoff: start at 5s, max at 30s
-      const waitTime = Math.min(5000 + (Math.floor((targetUptimeMs - currentUptime) / 60000) * 1000), 30000);
+    if (attempt < maxRetries) {
+      // Increasing delay: 5s, 10s, 15s, 20s, 20s, 20s...
+      const waitTime = Math.min(initialDelayMs * attempt, maxDelayMs);
+      console.debug(`Retrying MTR detection in ${waitTime / 1000}s...`);
       await delay(waitTime);
     }
   }
 
-  console.log(`System uptime of ${delayInMinutes} minutes reached!`);
+  console.debug('MTR not detected after all retries, assuming RoomOS');
+  return false;
 }
 
 /**
@@ -486,8 +495,6 @@ async function uptimeHandler(delayInMinutes = 5) {
 async function init() {
   console.log(`Initializing Macro...`)
   await xapi.Command.UserInterface.Message.Alert.Clear();
-
-  await uptimeHandler()
 
   const checkRoomOS = await Validate_RoomOS_Version(minimumRoomOSversion);
 
@@ -540,15 +547,10 @@ async function init() {
     console.warn('Caught Error on Config.WebEngine.Features.Peripherals.AudioOutput.set:', e.message)
   }
 
-  try {
-    const check4mtr = await xapi.Status.MicrosoftTeams.Software.get()
-
-    if (check4mtr?.Version?.Android) {
-      console.debug('MTR System Detected')
-      osPlatform = 'mtr';
-    }
-  } catch (e) {
-    console.debug({ Context: 'MTR Not detected, this error is ok to ignore', Error: e.message });
+  // Detect MTR with retry logic instead of a fixed uptime wait
+  const isMTR = await detectMTR();
+  if (isMTR) {
+    osPlatform = 'mtr';
   }
 
   if (developer.Mode && developer.PlatformOverride.Mode) {
