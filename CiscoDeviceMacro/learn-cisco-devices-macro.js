@@ -134,6 +134,12 @@ const minimumRoomOSversion = '11.32.1.1';
 let osPlatform = 'roomos';
 
 /**
+ * @type {boolean}
+ * @description Whether a Cisco Navigator touch panel is connected to the device
+ */
+let hasNavigator = false;
+
+/**
  * @type {string}
  * @description The url to open for this solution
  */
@@ -357,7 +363,7 @@ function updateUrl() {
 
   // append mtr content path if in MTR
   if (osPlatform.toLowerCase() === 'mtr') {
-    url += '/mtr-navigator'
+    url += hasNavigator ? '/mtr/navigator' : '/mtr/touchscreen';
   } else {
     // url += '/roomos-navigator' // Not available as route yet
   }
@@ -549,6 +555,19 @@ async function init() {
         console.warn(`Platform Override Detected. The Macro will now behave as if it were applied to a [${developer.PlatformOverride.Platform.toLowerCase()}] system`)
         break
     }
+  }
+
+  // Detect if a Cisco Navigator touch panel is connected
+  try {
+    const peripherals = await xapi.Command.Peripherals.List({ Connected: true, Type: 'TouchPanel' });
+    if (peripherals.Device) {
+      hasNavigator = true;
+      console.debug('Cisco Navigator touch panel detected');
+    } else {
+      console.debug('No Cisco Navigator detected, using touchscreen mode');
+    }
+  } catch (e) {
+    console.debug({ Context: 'Peripheral detection failed, defaulting to touchscreen', Error: e.message });
   }
 
   await updateUrl();

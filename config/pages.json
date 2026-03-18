@@ -19,7 +19,7 @@
         "type": "mtr",
         "name": "Cisco Devices for Microsoft Teams Rooms",
         "subtitle": "with touchscreen",
-        "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_share_powerpoint.png"
+        "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_share_wired_connection.png"
       }
     ]
   },
