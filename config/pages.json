@@ -9,11 +9,29 @@
     "deployments": [
       {
         "id": "mtr-navigator",
+        "type": "mtr",
         "name": "Cisco Devices for Microsoft Teams Rooms",
         "subtitle": "with Cisco Navigator touch controller",
         "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_join_scheduled_meeting.png"
+      },
+      {
+        "id": "mtr-touchscreen",
+        "type": "mtr",
+        "name": "Cisco Devices for Microsoft Teams Rooms",
+        "subtitle": "with touchscreen",
+        "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_share_powerpoint.png"
       }
     ]
+  },
+  "mtr": {
+    "title": "Learn Cisco Devices - Microsoft Teams Rooms",
+    "type": "selector",
+    "header": {
+      "title": "Learn how to use your Cisco device",
+      "subtitle": "Select your Microsoft Teams Rooms deployment type"
+    },
+    "deploymentFilter": "mtr",
+    "deployments": []
   },
   "mtr-navigator": {
     "title": "Learn Cisco Devices - Microsoft Teams Rooms with Cisco Navigator touch controller",
@@ -199,6 +217,128 @@
             "title": "Share wirelessly with Airplay",
             "thumbnail": "deployments/mtr/navigator/images/mtr_navigator_share_airplay.png",
             "video": "deployments/mtr/navigator/videos/mtr_navigator_share_airplay.webm",
+            "tags": ["airplay", "wirelessShare"],
+            "version": "RoomOS 26",
+            "default": true
+          }
+        ]
+      }
+    ]
+  },
+  "mtr-touchscreen": {
+    "title": "Learn Cisco Devices - Microsoft Teams Rooms with touchscreen",
+    "type": "deployment",
+    "header": {
+      "title": "Learn how to use your Cisco device",
+      "subtitle": "Video tutorials for Microsoft Teams Rooms with touchscreen"
+    },
+    "sections": [
+      {
+        "id": "getting-started",
+        "title": "Getting Started",
+        "videos": [
+          {
+            "title": "Open the Cisco side panel on touchscreen",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_side_panel.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_side_panel.webm",
+            "tags": ["getting-started"],
+            "version": "RoomOS 26",
+            "default": true
+          }
+        ]
+      },
+      {
+        "id": "create",
+        "title": "Create a Meeting",
+        "videos": [
+          {
+            "title": "Schedule a meeting in Microsoft Teams",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_schedule_teams.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_schedule_teams.webm",
+            "tags": ["calendar"],
+            "version": "RoomOS 26",
+            "default": true
+          },
+          {
+            "title": "Start a new meeting",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_meet_now.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_meet_now.webm",
+            "tags": ["navigator"],
+            "version": "RoomOS 26",
+            "default": true
+          }
+        ]
+      },
+      {
+        "id": "join",
+        "title": "Join a Meeting",
+        "videos": [
+          {
+            "title": "Join a scheduled meeting",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_join_scheduled_meeting.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_join_scheduled_meeting.webm",
+            "tags": ["obtp"],
+            "version": "RoomOS 26",
+            "default": true
+          },
+          {
+            "title": "Join a meeting using the QR code",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_join_qr.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_join_qr.webm",
+            "tags": ["qr"],
+            "version": "RoomOS 26",
+            "default": true
+          },
+          {
+            "title": "Join a Webex or Zoom meeting",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_join_webex_zoom_id.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_join_webex_zoom_id.webm",
+            "tags": ["third-party", "webex", "zoom"],
+            "version": "RoomOS 26",
+            "default": true
+          },
+          {
+            "title": "Add your device to a scheduled meeting",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_join_room_audio.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_join_room_audio.webm",
+            "tags": ["audio"],
+            "version": "RoomOS 26",
+            "default": true
+          }
+        ]
+      },
+      {
+        "id": "share",
+        "title": "Share Content",
+        "videos": [
+          {
+            "title": "Share content using a wired connection",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_share_wired_connection.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_share_wired_connection.webm",
+            "tags": ["wired"],
+            "version": "RoomOS 26",
+            "default": true
+          },
+          {
+            "title": "Share with PowerPoint Live",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_share_powerpoint.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_share_powerpoint.webm",
+            "tags": ["powerpoint"],
+            "version": "RoomOS 26",
+            "default": true
+          },
+          {
+            "title": "Share wirelessly with Miracast",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_share_miracast.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_share_miracast.webm",
+            "tags": ["miracast", "wirelessShare"],
+            "version": "RoomOS 26",
+            "default": true
+          },
+          {
+            "title": "Share wirelessly with Airplay",
+            "thumbnail": "deployments/mtr/touchscreen/images/mtr_touchscreen_share_airplay.png",
+            "video": "deployments/mtr/touchscreen/videos/mtr_touchscreen_share_airplay.webm",
             "tags": ["airplay", "wirelessShare"],
             "version": "RoomOS 26",
             "default": true

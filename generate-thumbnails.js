@@ -144,8 +144,10 @@ function main() {
   
   // Parse --time argument
   const timeIndex = args.indexOf('--time');
+  let timeValue = null;
   if (timeIndex !== -1 && args[timeIndex + 1]) {
-    const seconds = parseFloat(args[timeIndex + 1]);
+    timeValue = args[timeIndex + 1];
+    const seconds = parseFloat(timeValue);
     if (!isNaN(seconds)) {
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
@@ -156,13 +158,19 @@ function main() {
   
   // Parse --exclude argument
   const excludeIndex = args.indexOf('--exclude');
+  let excludeValue = null;
   if (excludeIndex !== -1 && args[excludeIndex + 1]) {
-    excludePattern = args[excludeIndex + 1];
+    excludeValue = args[excludeIndex + 1];
+    excludePattern = excludeValue;
     console.log(`🚫 Excluding files containing: "${excludePattern}"\n`);
   }
   
-  // Get target path (filter out flag arguments)
-  const pathArgs = args.filter(arg => !arg.startsWith('--') && arg !== args[timeIndex + 1] && arg !== args[excludeIndex + 1]);
+  // Get target path (filter out flag arguments and their values)
+  const pathArgs = args.filter(arg => 
+    !arg.startsWith('--') && 
+    arg !== timeValue && 
+    arg !== excludeValue
+  );
   if (pathArgs.length > 0) {
     targetPath = pathArgs[0];
   }

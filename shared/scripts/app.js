@@ -382,7 +382,15 @@ class CiscoDeviceApp {
       qrCode.style.display = 'none';
     }
     
-    const deployments = config.deployments || [];
+    // Filter deployments if deploymentFilter is specified
+    let deployments = config.deployments || [];
+    if (config.deploymentFilter) {
+      // Get all deployments from homepage config
+      const allDeployments = this.config.homepage.deployments || [];
+      // Filter by type
+      deployments = allDeployments.filter(d => d.type === config.deploymentFilter);
+    }
+    
     const helpSection = config.helpSection;
     
     // Build help section HTML if it exists
