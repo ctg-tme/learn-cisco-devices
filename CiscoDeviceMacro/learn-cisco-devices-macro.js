@@ -62,6 +62,8 @@ import xapi from 'xapi';
  *   'Auto' will only show a QR code if the User Agent reports that a RoomOS device is in use.
  *   'On' will force the QR Code on.
  *   'Off' will force the QR Code Off.
+ * @property {boolean} MTROnly - If true, the macro will only activate on MTR devices.
+ *   RoomOS-only devices will be skipped. Set to false when RoomOS content becomes available.
  */
 /**
  * @typedef {object} Config
@@ -81,7 +83,8 @@ const config = {
   },
   SiteSettings: {
     AutoTimeout: true,
-    QRCode: 'Auto'              // Auto/On/Off. Auto will only show a QR code if the User Agent reports that a RoomOS device is in use. On will for the QR Code on, Off will force the QR Code Off
+    QRCode: 'Auto',             // Auto/On/Off. Auto will only show a QR code if the User Agent reports that a RoomOS device is in use. On will for the QR Code on, Off will force the QR Code Off
+    MTROnly: true               // If true, the macro will only create a Learn button on MTR devices. RoomOS-only devices will be skipped until RoomOS content is available.
   }
 }
 
@@ -555,6 +558,12 @@ async function init() {
         console.warn(`Platform Override Detected. The Macro will now behave as if it were applied to a [${developer.PlatformOverride.Platform.toLowerCase()}] system`)
         break
     }
+  }
+
+  // If MTROnly is enabled, skip setup on non-MTR devices
+  if (config.SiteSettings.MTROnly && osPlatform !== 'mtr') {
+    console.info('MTROnly is enabled and this is not an MTR device. Macro will not create a Learn button. Set MTROnly to false to enable on RoomOS devices.');
+    return;
   }
 
   // Detect if a Cisco Navigator touch panel is connected

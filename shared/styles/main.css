@@ -144,6 +144,7 @@ html {
 
 .qr-code {
   position: fixed;
+  top: 5px;
   left: 20px;
   z-index: 999;
   background: rgba(255, 255, 255, 0.9);
