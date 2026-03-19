@@ -346,7 +346,7 @@ async function buildUI() {
  * and query parameters based on developer and site settings.
  *
  * The function first removes any trailing slash from the base `url`.
- * If `osPlatform` is 'mtr', it appends '/mtr-navigator' to the URL.
+ * If `osPlatform` is 'mtr', it appends '/mtr/navigator' to the URL.
  * It then adds query parameters for debugging (`debug=true` if `developer.Mode` is true),
  * auto-timeout (`timeout=true/false` based on `config.SiteSettings.AutoTimeout`),
  * and QR code display (`qr=true/false` based on `config.SiteSettings.QRCode`).
@@ -364,11 +364,11 @@ function updateUrl() {
   // remove trailing / if found in url path
   url = url.endsWith('/') ? url.slice(0, -1) : url;
 
-  // append mtr content path if in MTR
+  // append platform and device-specific content path
   if (osPlatform.toLowerCase() === 'mtr') {
     url += hasNavigator ? '/mtr/navigator' : '/mtr/touchscreen';
   } else {
-    // url += '/roomos-navigator' // Not available as route yet
+    url += hasNavigator ? '/roomos/navigator' : '/roomos/touchscreen';
   }
 
   if (developer.Mode) {
